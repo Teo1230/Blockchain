@@ -1,8 +1,9 @@
 import json
 import requests
 import time
-from web3 import Web3
 import os
+import threading  # Adaugă această linie
+from web3 import Web3
 from flask import Flask, render_template, request, jsonify
 from flask_wtf import FlaskForm
 from wtforms import FileField, SubmitField
@@ -30,21 +31,17 @@ w3 = Web3(Web3.HTTPProvider('https://sepolia.infura.io/v3/15d37f1332cf4f7ebf85be
 if not w3.is_address(wallet_address):
     raise ValueError(f"Invalid wallet address: {wallet_address}")
 
-
 def value_based_gas_price_strategy(web3, transaction_params):
     if transaction_params and transaction_params.get('value', 0) > Web3.to_wei(1, 'ether'):
         return Web3.to_wei(20, 'gwei')
     else:
         return Web3.to_wei(5, 'gwei')
 
-
 w3.eth.set_gas_price_strategy(value_based_gas_price_strategy)
-
 
 class UploadForm(FlaskForm):
     audio = FileField('Fișier audio', validators=[DataRequired()])
     submit = SubmitField('Încarcă')
-
 
 # Sepolia ABI
 try:
@@ -52,7 +49,6 @@ try:
         SEPOLIA_ABI = json.load(f)
 except Exception as e:
     print(e)
-
 
 # Proxy Pattern for managing transactions
 class TransactionManager:
@@ -100,7 +96,6 @@ class TransactionManager:
             file.write(audio_data)
         return transaction_hash
 
-
     def upload_transaction(self, filename):
         nonce = w3.eth.get_transaction_count(self.wallet_address)
         with open(os.path.join('uploads', filename), 'rb') as file:
@@ -116,12 +111,19 @@ class TransactionManager:
 
         signed_tx = w3.eth.account.sign_transaction(tx, self.private_key)
         transaction_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
-        # print(transaction_hash.hex())
         return transaction_hash
 
+    def listen_to_events(self):
+        contract = w3.eth.contract(address=sepolia_address, abi=SEPOLIA_ABI)
+        event_filter = contract.events.FileUploaded.create_filter(fromBlock="latest")
+        print(event_filter)
+        print("Listening")
+        for event in event_filter.get_new_entries():
+            print("DA")
+            print(f"New event: {event['args']}")
+            # Aici poți adăuga logica suplimentară pentru a trata evenimentele
 
 transaction_manager = TransactionManager(wallet_address, private_key)
-
 
 @app.route('/')
 def index():
@@ -154,7 +156,6 @@ def index():
     return render_template('index.html', wallet_address=wallet_address, balance=balance, uploaded_files=uploaded_files,
                            form=form, costs=costs, total_cost=total_cost)
 
-
 @app.route('/download/<filename>')
 def download_music(filename):
     print(f"Downloading {filename}...")
@@ -164,7 +165,6 @@ def download_music(filename):
         'value': Web3.to_wei('0', 'ether')
     })
     return render_template('download_complete.html', filename=filename, transaction_cost=transaction_cost,transaction_hash=transaction_hash)
-
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_music():
@@ -182,7 +182,6 @@ def upload_music():
 
     return render_template('upload.html', form=form)
 
-
 @app.route('/calculate_cost', methods=['POST'])
 def calculate_cost():
     file = request.files['audio']
@@ -190,10 +189,14 @@ def calculate_cost():
     transaction_cost = w3.eth.generate_gas_price({'value': file_size})
     return jsonify({"transaction_cost": str(w3.from_wei(transaction_cost, 'ether'))})
 
-
 if __name__ == '__main__':
     if not os.path.exists('uploads'):
         os.makedirs('uploads')
     if not os.path.exists('downloads'):
         os.makedirs('downloads')
+
+    # Ascultă evenimentele Sepolia într-un thread separat
+    event_thread = threading.Thread(target=transaction_manager.listen_to_events)
+    event_thread.start()
+
     app.run(debug=True)

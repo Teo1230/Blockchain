@@ -55,7 +55,7 @@
         {{ form.hidden_tag() }}
         <p>
             {{ form.audio.label }}<br>
-            {{ form.audio() }}
+            {{ form.audio(accept=".mp3") }}
             <span id="costSpan"></span>
         </p>
         <p>
@@ -72,28 +72,38 @@
     <p><strong>Cost total: </strong>{{ total_cost }} ETH</p>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const audioInput = document.querySelector('input[type="file"]');
-            const costSpan = document.getElementById('costSpan');
+    document.addEventListener('DOMContentLoaded', () => {
+        const audioInput = document.querySelector('input[type="file"]');
+        const costSpan = document.getElementById('costSpan');
 
-            audioInput.addEventListener('change', async (event) => {
-                const file = event.target.files[0];
-                const formData = new FormData();
-                formData.append('audio', file);
+        audioInput.addEventListener('change', async (event) => {
+            const file = event.target.files[0];
 
-                try {
-                    const response = await fetch('/calculate_cost', {
-                        method: 'POST',
-                        body: formData
-                    });
+            // Verifică extensia fișierului
+            if (!file.name.endsWith('.mp3')) {
+                alert('Vă rugăm să încărcați doar fișiere .mp3.');
+                audioInput.value = ''; // Golește valoarea inputului pentru a permite selectarea unui alt fișier
+                costSpan.innerText = '';
+                return;
+            }
 
-                    const data = await response.json();
-                    costSpan.innerText = ` - Price: ${data.transaction_cost} ETH`;
-                } catch (error) {
-                    console.error('Error calculating cost:', error);
-                }
-            });
+            const formData = new FormData();
+            formData.append('audio', file);
+
+            try {
+                const response = await fetch('/calculate_cost', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                costSpan.innerText = ` - Price: ${data.transaction_cost} ETH`;
+            } catch (error) {
+                console.error('Error calculating cost:', error);
+            }
         });
-    </script>
+    });
+</script>
+
 </body>
 </html>
