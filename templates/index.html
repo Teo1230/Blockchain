@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        h1, h2 {
+            color: #333333;
+        }
+        p {
+            color: #555555;
+        }
+        form {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type="file"] {
+            margin-top: 10px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dashboard</h1>
+    <p><strong>Adresa portofelului:</strong> {{ wallet_address }}</p>
+    <p><strong>Soldul portofelului:</strong> {{ balance }} ETH</p>
+
+    <h2>Încărcare muzică</h2>
+    <form action="/upload" method="post" enctype="multipart/form-data" id="uploadForm">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.audio.label }}<br>
+            {{ form.audio() }}
+            <span id="costSpan"></span>
+        </p>
+        <p>
+            {{ form.submit() }}
+        </p>
+    </form>
+
+    <h2>Muzică încărcată</h2>
+    <ul>
+        {% for file in uploaded_files %}
+            <li><a href="{{ url_for('download_music', filename=file) }}">{{ file }} - Price: {{ costs.get(file, 'N/A') }} ETH</a></li>
+        {% endfor %}
+    </ul>
+    <p><strong>Cost total: </strong>{{ total_cost }} ETH</p>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const audioInput = document.querySelector('input[type="file"]');
+            const costSpan = document.getElementById('costSpan');
+
+            audioInput.addEventListener('change', async (event) => {
+                const file = event.target.files[0];
+                const formData = new FormData();
+                formData.append('audio', file);
+
+                try {
+                    const response = await fetch('/calculate_cost', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const data = await response.json();
+                    costSpan.innerText = ` - Price: ${data.transaction_cost} ETH`;
+                } catch (error) {
+                    console.error('Error calculating cost:', error);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
