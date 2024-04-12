@@ -1,10 +1,9 @@
 import json
-
 import requests
 import time
 from web3 import Web3
 import os
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory, jsonify
+from flask import Flask, render_template, request, jsonify
 from flask_wtf import FlaskForm
 from wtforms import FileField, SubmitField
 from wtforms.validators import DataRequired
@@ -54,9 +53,78 @@ try:
 except Exception as e:
     print(e)
 
+
+# Proxy Pattern for managing transactions
+class TransactionManager:
+    def __init__(self, wallet_address, private_key):
+        self.wallet_address = wallet_address
+        self.private_key = private_key
+
+    def download_transaction(self, filename):
+        nonce = w3.eth.get_transaction_count(self.wallet_address)
+        with open(os.path.join('uploads', filename), 'rb') as file:
+            audio_data = file.read()
+
+        transaction_cost = w3.eth.generate_gas_price({
+            'to': recipient_address,
+            'value': Web3.to_wei('0', 'ether')
+        })
+
+        tx = {
+            'to': recipient_address,
+            'from': self.wallet_address,
+            'nonce': nonce,
+            'maxFeePerGas': transaction_cost,
+            'maxPriorityFeePerGas': Web3.to_wei('1', 'gwei'),
+            'value': Web3.to_wei('0', 'ether'),  # Transaction value
+            'gas': 2000000,  # Adjusted the gas parameter
+            'chainId': 11155111  # Add the chainId parameter
+        }
+
+        signed_tx = w3.eth.account.sign_transaction(tx, self.private_key)
+        tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+        transaction_hash=tx_hash.hex()
+
+        while True:
+            try:
+                receipt = w3.eth.get_transaction_receipt(tx_hash)
+                if receipt:
+                    print(f"Transaction {tx_hash.hex()} mined.")
+                    break
+                print("Waiting for transaction to be mined...")
+                time.sleep(10)
+            except Exception as e:
+                print(f"An error occurred while waiting for transaction receipt: {e}")
+
+        with open(os.path.join('downloads', filename), 'wb') as file:
+            file.write(audio_data)
+        return transaction_hash
+
+
+    def upload_transaction(self, filename):
+        nonce = w3.eth.get_transaction_count(self.wallet_address)
+        with open(os.path.join('uploads', filename), 'rb') as file:
+            audio_data = file.read()
+
+        contract = w3.eth.contract(address=sepolia_address, abi=SEPOLIA_ABI)
+        tx = contract.functions.uploadFile(filename).build_transaction({
+            'chainId': 11155111,
+            'gas': 2000000,
+            'gasPrice': w3.eth.generate_gas_price({'value': os.path.getsize(os.path.join('uploads', filename))}),
+            'nonce': nonce,
+        })
+
+        signed_tx = w3.eth.account.sign_transaction(tx, self.private_key)
+        transaction_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+        # print(transaction_hash.hex())
+        return transaction_hash
+
+
+transaction_manager = TransactionManager(wallet_address, private_key)
+
+
 @app.route('/')
 def index():
-    # Check Ethereum node synchronization status
     syncing = w3.eth.syncing
     if syncing:
         print(f"Current block: {syncing['currentBlock']}, Highest block: {syncing['highestBlock']}")
@@ -64,7 +132,6 @@ def index():
         print("Node is fully synchronized.")
 
     try:
-        # Check wallet balance
         response = requests.get(url, timeout=10)
         data = response.json()
         balance = w3.from_wei(int(data['result']), 'ether')
@@ -83,7 +150,7 @@ def index():
 
     total_cost = sum(costs.values())
 
-    form = UploadForm()  # Initialize form here
+    form = UploadForm()
     return render_template('index.html', wallet_address=wallet_address, balance=balance, uploaded_files=uploaded_files,
                            form=form, costs=costs, total_cost=total_cost)
 
@@ -91,14 +158,12 @@ def index():
 @app.route('/download/<filename>')
 def download_music(filename):
     print(f"Downloading {filename}...")
-    # Make a transaction to download the file
-    download_transaction(wallet_address, private_key, filename)
-    print(f"{filename} downloaded.")
+    transaction_hash=transaction_manager.download_transaction(filename)
     transaction_cost = w3.eth.generate_gas_price({
         'to': recipient_address,
         'value': Web3.to_wei('0', 'ether')
     })
-    return render_template('download_complete.html', filename=filename, transaction_cost=transaction_cost)
+    return render_template('download_complete.html', filename=filename, transaction_cost=transaction_cost,transaction_hash=transaction_hash)
 
 
 @app.route('/upload', methods=['GET', 'POST'])
@@ -108,15 +173,12 @@ def upload_music():
         audio = form.audio.data
         filename = audio.filename
         audio.save(os.path.join('uploads', filename))
-
-        # Make a transaction to upload the file
-        upload_transaction(wallet_address, private_key, filename)
+        transaction_hash=transaction_manager.upload_transaction(filename)
         transaction_cost = w3.eth.generate_gas_price({
             'to': recipient_address,
             'value': Web3.to_wei('0', 'ether')
         })
-
-        return render_template('upload_complete.html', form=form, transaction_cost=transaction_cost)
+        return render_template('upload_complete.html', form=form, transaction_cost=transaction_cost,transaction_hash=transaction_hash)
 
     return render_template('upload.html', form=form)
 
@@ -127,72 +189,6 @@ def calculate_cost():
     file_size = file.seek(0, os.SEEK_END)
     transaction_cost = w3.eth.generate_gas_price({'value': file_size})
     return jsonify({"transaction_cost": str(w3.from_wei(transaction_cost, 'ether'))})
-
-
-def download_transaction(sender_address, private_key, filename):
-    nonce = w3.eth.get_transaction_count(sender_address)
-    print(f"Nonce: {nonce}")
-    with open(os.path.join('uploads', filename), 'rb') as file:
-        audio_data = file.read()
-
-    # Calculate transaction cost based on file size
-    transaction_cost = w3.eth.generate_gas_price({
-        'to': recipient_address,
-        'value': Web3.to_wei('0', 'ether')
-    })
-
-    # Send the transaction cost to the recipient address
-    tx = {
-        'to': recipient_address,
-        'from': sender_address,
-        'nonce': nonce,
-        'maxFeePerGas': transaction_cost,
-        'maxPriorityFeePerGas': Web3.to_wei('1', 'gwei'),
-        'value': Web3.to_wei('0', 'ether'),  # Transaction value
-        'gas': 2000000,  # Adjusted the gas parameter
-        'chainId': 11155111  # Add the chainId parameter
-    }
-
-    signed_tx = w3.eth.account.sign_transaction(tx, private_key)
-    tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
-    print(f"Transaction Hash: {tx_hash.hex()}")
-
-    # Wait for the transaction to be mined
-    while True:
-        try:
-            receipt = w3.eth.get_transaction_receipt(tx_hash)
-            if receipt:
-                print(f"Transaction {tx_hash.hex()} mined.")
-                break
-            print("Waiting for transaction to be mined...")
-            time.sleep(10)  # Wait for 10 seconds before checking again
-        except Exception as e:
-            print(f"An error occurred while waiting for transaction receipt: {e}")
-
-    # Save the downloaded file in the 'downloads' folder
-    with open(os.path.join('downloads', filename), 'wb') as file:
-        file.write(audio_data)
-
-
-def upload_transaction(sender_address, private_key, filename):
-    nonce = w3.eth.get_transaction_count(sender_address)
-    print(nonce)
-    with open(os.path.join('uploads', filename), 'rb') as file:
-        audio_data = file.read()
-
-    # Upload the data to the Sepolia smart contract and get the transaction hash
-    contract = w3.eth.contract(address=sepolia_address, abi=SEPOLIA_ABI)
-    tx = contract.functions.uploadFile(filename).build_transaction({
-        'chainId': 11155111 , # Add the chainId parameter
-        'gas': 2000000,
-        'gasPrice': w3.eth.generate_gas_price({'value': os.path.getsize(os.path.join('uploads', filename))}),
-        'nonce': nonce,
-    })
-
-    signed_tx = w3.eth.account.sign_transaction(tx, private_key)
-    transaction_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
-    print(transaction_hash.hex())
-    return transaction_hash
 
 
 if __name__ == '__main__':
