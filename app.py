@@ -1,3 +1,5 @@
+import json
+
 import requests
 import time
 from web3 import Web3
@@ -29,17 +31,28 @@ w3 = Web3(Web3.HTTPProvider('https://sepolia.infura.io/v3/15d37f1332cf4f7ebf85be
 if not w3.is_address(wallet_address):
     raise ValueError(f"Invalid wallet address: {wallet_address}")
 
+
 def value_based_gas_price_strategy(web3, transaction_params):
     if transaction_params and transaction_params.get('value', 0) > Web3.to_wei(1, 'ether'):
         return Web3.to_wei(20, 'gwei')
     else:
         return Web3.to_wei(5, 'gwei')
 
+
 w3.eth.set_gas_price_strategy(value_based_gas_price_strategy)
+
 
 class UploadForm(FlaskForm):
     audio = FileField('Fișier audio', validators=[DataRequired()])
     submit = SubmitField('Încarcă')
+
+
+# Sepolia ABI
+try:
+    with open(os.path.join('build', 'SepoliaContract.abi')) as f:
+        SEPOLIA_ABI = json.load(f)
+except Exception as e:
+    print(e)
 
 @app.route('/')
 def index():
@@ -74,6 +87,7 @@ def index():
     return render_template('index.html', wallet_address=wallet_address, balance=balance, uploaded_files=uploaded_files,
                            form=form, costs=costs, total_cost=total_cost)
 
+
 @app.route('/download/<filename>')
 def download_music(filename):
     print(f"Downloading {filename}...")
@@ -84,7 +98,7 @@ def download_music(filename):
         'to': recipient_address,
         'value': Web3.to_wei('0', 'ether')
     })
-    return render_template('download_complete.html', filename=filename,transaction_cost=transaction_cost)
+    return render_template('download_complete.html', filename=filename, transaction_cost=transaction_cost)
 
 
 @app.route('/upload', methods=['GET', 'POST'])
@@ -101,11 +115,11 @@ def upload_music():
             'to': recipient_address,
             'value': Web3.to_wei('0', 'ether')
         })
-        
 
-        return render_template('upload_complete.html', form=form,transaction_cost=transaction_cost)
+        return render_template('upload_complete.html', form=form, transaction_cost=transaction_cost)
 
     return render_template('upload.html', form=form)
+
 
 @app.route('/calculate_cost', methods=['POST'])
 def calculate_cost():
@@ -113,6 +127,7 @@ def calculate_cost():
     file_size = file.seek(0, os.SEEK_END)
     transaction_cost = w3.eth.generate_gas_price({'value': file_size})
     return jsonify({"transaction_cost": str(w3.from_wei(transaction_cost, 'ether'))})
+
 
 def download_transaction(sender_address, private_key, filename):
     nonce = w3.eth.get_transaction_count(sender_address)
@@ -158,6 +173,7 @@ def download_transaction(sender_address, private_key, filename):
     with open(os.path.join('downloads', filename), 'wb') as file:
         file.write(audio_data)
 
+
 def upload_transaction(sender_address, private_key, filename):
     nonce = w3.eth.get_transaction_count(sender_address)
     print(nonce)
@@ -165,22 +181,19 @@ def upload_transaction(sender_address, private_key, filename):
         audio_data = file.read()
 
     # Upload the data to the Sepolia smart contract and get the transaction hash
-    tx = {
-        'to': sepolia_address,
-        'from': sender_address,
+    contract = w3.eth.contract(address=sepolia_address, abi=SEPOLIA_ABI)
+    tx = contract.functions.uploadFile(filename).build_transaction({
+        'chainId': 11155111 , # Add the chainId parameter
+        'gas': 2000000,
+        'gasPrice': w3.eth.generate_gas_price({'value': os.path.getsize(os.path.join('uploads', filename))}),
         'nonce': nonce,
-        'maxFeePerGas': w3.eth.generate_gas_price({'value': os.path.getsize(os.path.join('uploads', filename))}),
-        'maxPriorityFeePerGas': Web3.to_wei('1', 'gwei'),
-        'data': audio_data,
-        'gas': 2000000,  # Adjusted the gas parameter
-        'chainId': 11155111  # Add the chainId parameter
-    }
-    print(tx)
+    })
+
     signed_tx = w3.eth.account.sign_transaction(tx, private_key)
-    print(signed_tx)
     transaction_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
     print(transaction_hash.hex())
     return transaction_hash
+
 
 if __name__ == '__main__':
     if not os.path.exists('uploads'):
