@@ -14,10 +14,10 @@ contract MusicContract {
     event VoteCasted(address indexed voter, string filename);
     event EthTransferred(address indexed sender, address indexed recipient, uint256 amount);
 
-     LibraryContract public lib;
+    LibraryContract public lib;
 
     modifier onlyOwner() {
-        require(lib.isOwner(msg.sender), "Not the owner");
+        require(msg.sender == owner, "Not the owner");
         _;
     }
 
@@ -32,31 +32,36 @@ contract MusicContract {
     }
 
     constructor(address _withdrawalContract) {
-    owner = msg.sender;
-    lib = new LibraryContract();
-    withdrawalContract = _withdrawalContract;
-    }
-
-
-    function uploadFile(string memory filename) public payable {
-        require(msg.value > 0, "Value must be greater than 0");
-        fileOwners[filename] = msg.sender;
-        fileBalances[filename] += msg.value;
-        emit FileUploaded(msg.sender, filename, msg.value);
+        owner = msg.sender;
+        lib = new LibraryContract();
+        withdrawalContract = _withdrawalContract;
     }
 
     function notifyVoteCasted(string memory filename) external {
         emit VoteCasted(msg.sender, filename);
     }
 
+    function uploadFile(string memory filename) public payable {
+        require(msg.value > 0, "Value must be greater than 0");
+
+        // Transfer ETH către proprietarul contractului
+        payable(owner).transfer(msg.value);
+
+        fileOwners[filename] = msg.sender;
+        fileBalances[filename] += msg.value;
+        emit FileUploaded(msg.sender, filename, msg.value);
+    }
+
+
     function deleteFile(string memory filename) public onlyOwner {
         require(fileOwners[filename] != address(0), "File not found");
         uint256 balance = fileBalances[filename];
         fileBalances[filename] = 0;
         (bool success, ) = withdrawalContract.call{value: balance}(
-            abi.encodeWithSignature("withdraw(address,uint256)", owner, balance)
+         abi.encodeWithSignature("withdraw(address,uint256)", owner, balance)
         );
         require(success, "Withdrawal failed");
         emit FileDeleted(msg.sender, filename);
     }
+
 }

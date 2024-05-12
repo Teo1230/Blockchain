@@ -11,6 +11,7 @@ from wtforms.validators import DataRequired
 from flask import redirect, url_for
 from tinydb import TinyDB, Query
 from functools import partial
+from hexbytes import HexBytes
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret'
@@ -41,6 +42,93 @@ def value_based_gas_price_strategy(web3, transaction_params):
         return Web3.to_wei(5, 'gwei')
 
 w3.eth.set_gas_price_strategy(value_based_gas_price_strategy)
+
+def value_based_gas_price_strategy(web3, transaction_params):
+    try:
+        # Obțineți prețurile gazului de la ETH Gas Station
+        response = requests.get("https://ethgasstation.info/api/ethgasAPI.json")
+        gas_prices = response.json()
+        
+        # Afișați prețurile gazului
+        print("Gas Prices from ETH Gas Station:")
+        print(f"Fast: {gas_prices['fast']} Gwei")
+        print(f"Standard: {gas_prices['standard']} Gwei")
+        print(f"SafeLow: {gas_prices['safeLow']} Gwei")
+        
+        # Alegeți prețul gazului în funcție de valoarea tranzacției
+        if transaction_params and transaction_params.get('value', 0) > Web3.to_wei(1, 'ether'):
+            gas_price = gas_prices['fast']
+        else:
+            gas_price = gas_prices['standard']
+        
+        # Convertiți prețul gazului din Gwei în Wei
+        gas_price_wei = Web3.toWei(gas_price, 'gwei')
+        
+        return gas_price_wei
+    except Exception as e:
+        print(f"An error occurred while fetching gas prices: {e}")
+        # În caz de eroare, folosim un preț gaz implicit
+        return Web3.toWei(5, 'gwei')
+
+
+# Funcție pentru estimarea costului gazului pentru o tranzacție
+def estimate_gas_cost(transaction):
+    try:
+        gas_estimate = w3.eth.estimate_gas(transaction)
+        return gas_estimate
+    except Exception as e:
+        print(f"An error occurred while estimating gas cost: {e}")
+        return None
+
+# Funcție pentru fixarea limită de cost a gazului pentru o tranzacție
+def set_gas_limit(gas_estimate):
+    if gas_estimate:
+        # Setăm limita de cost a gazului la o valoare mai mare decât estimarea
+        gas_limit = int(gas_estimate * 1.5)  # Puteti ajusta factorul dupa preferinta
+        return gas_limit
+    else:
+        return None
+
+# Funcție pentru gestionarea erorilor de limită a gazului
+def handle_gas_limit_error(e, transaction):
+    # Aici puteti implementa o logica specifica pentru gestionarea erorilor de gaz
+    print(f"An error occurred while setting gas limit: {e}")
+    print(f"Transaction: {transaction}")
+
+# Funcție pentru efectuarea tranzacției cu limita de cost a gazului fixată
+def send_transaction_with_gas_limit(transaction, gas_limit):
+    try:
+        transaction['gas'] = gas_limit
+        signed_tx = w3.eth.account.sign_transaction(transaction, private_key)
+        tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+        return tx_hash
+    except Exception as e:
+        print(f"An error occurred while sending transaction with gas limit: {e}")
+        return None
+
+# Exemplu de utilizare
+transaction = {
+    'to': recipient_address,
+    'from': wallet_address,
+    'value': Web3.to_wei('1', 'ether'),
+    'nonce': w3.eth.get_transaction_count(wallet_address),
+}
+
+# Estimam costul gazului pentru tranzactie
+gas_estimate = estimate_gas_cost(transaction)
+
+# Setam limita de cost a gazului
+gas_limit = set_gas_limit(gas_estimate)
+
+if gas_limit:
+    # Trimitem tranzactia cu limita de cost a gazului fixata
+    tx_hash = send_transaction_with_gas_limit(transaction, gas_limit)
+    if tx_hash:
+        print(f"Transaction sent successfully. Hash: {HexBytes(tx_hash).hex()}")
+    else:
+        print("Failed to send transaction.")
+else:
+    print("Failed to set gas limit.")
 
 class UploadForm(FlaskForm):
     audio = FileField('Audio File', validators=[DataRequired()])
@@ -89,75 +177,90 @@ class TransactionManager:
         self.private_key = private_key
 
     def download_transaction(self, filename):
-        nonce = w3.eth.get_transaction_count(self.wallet_address)
-        with open(os.path.join('uploads', filename), 'rb') as file:
-            audio_data = file.read()
+        try:
+            nonce = w3.eth.get_transaction_count(self.wallet_address)
+            with open(os.path.join('uploads', filename), 'rb') as file:
+                audio_data = file.read()
 
-        transaction_cost = w3.eth.generate_gas_price({
-            'to': recipient_address,
-            'value': Web3.to_wei('0', 'ether')
-        })
+            transaction_cost = w3.eth.generate_gas_price({
+                'to': recipient_address,
+                'value': Web3.to_wei('0', 'ether')
+            })
 
-        tx = {
-            'to': recipient_address,
-            'from': self.wallet_address,
-            'nonce': nonce,
-            'maxFeePerGas': transaction_cost,
-            'maxPriorityFeePerGas': Web3.to_wei('1', 'gwei'),
-            'value': Web3.to_wei('0', 'ether'),  # Transaction value
-            'gas': 30000000,  # Adjusted the gas parameter
-            'chainId': 11155111  # Add the chainId parameter
-        }
+            tx = {
+                'to': recipient_address,
+                'from': self.wallet_address,
+                'nonce': nonce,
+                'maxFeePerGas': transaction_cost,
+                'maxPriorityFeePerGas': Web3.to_wei('1', 'gwei'),
+                'value': Web3.to_wei('0', 'ether'),  # Transaction value
+                'gas': 30000000,  # Adjusted the gas parameter
+                'chainId': 11155111  # Add the chainId parameter
+            }
 
-        signed_tx = w3.eth.account.sign_transaction(tx, self.private_key)
-        tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
-        transaction_hash=tx_hash.hex()
+            signed_tx = w3.eth.account.sign_transaction(tx, self.private_key)
+            tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+            transaction_hash=tx_hash.hex()
 
-        while True:
-            try:
-                receipt = w3.eth.get_transaction_receipt(tx_hash)
-                if receipt:
-                    print(f"Transaction {tx_hash.hex()} mined.")
-                    break
-                print("Waiting for transaction to be mined...")
-                time.sleep(10)
-            except Exception as e:
-                print(f"An error occurred while waiting for transaction receipt: {e}")
+            while True:
+                try:
+                    receipt = w3.eth.get_transaction_receipt(tx_hash)
+                    if receipt:
+                        print(f"Transaction {tx_hash.hex()} mined.")
+                        break
+                    print("Waiting for transaction to be mined...")
+                    time.sleep(10)
+                except Exception as e:
+                    print(f"An error occurred while waiting for transaction receipt: {e}")
 
-        with open(os.path.join('downloads', filename), 'wb') as file:
-            file.write(audio_data)
-        return transaction_hash
+            with open(os.path.join('downloads', filename), 'wb') as file:
+                file.write(audio_data)
+            return transaction_hash
+        except FileNotFoundError:
+            print("File not found.")
+        except IOError as e:
+            print(f"Error reading or writing file: {e}")
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
 
     def upload_transaction(self, filename):
-        nonce = w3.eth.get_transaction_count(self.wallet_address)
-        with open(os.path.join('uploads', filename), 'rb') as file:
-            audio_data = file.read()
+        try:
+            nonce = w3.eth.get_transaction_count(self.wallet_address)
+            with open(os.path.join('uploads', filename), 'rb') as file:
+                audio_data = file.read()
 
-        contract = w3.eth.contract(address=sepolia_address, abi=SEPOLIA_ABI)
-        tx = contract.functions.uploadFile(filename).build_transaction({
-            'chainId': 11155111,
-            'gas': 30000000,
-            'gasPrice': w3.eth.generate_gas_price({'value': os.path.getsize(os.path.join('uploads', filename))}),
-            'nonce': nonce,
-        })
+            contract = w3.eth.contract(address=sepolia_address, abi=SEPOLIA_ABI)
+            tx = contract.functions.uploadFile(filename).build_transaction({
+                'chainId': 11155111,
+                'gas': 30000000,
+                'gasPrice': w3.eth.generate_gas_price({'value': os.path.getsize(os.path.join('uploads', filename))}),
+                'nonce': nonce,
+            })
 
-        signed_tx = w3.eth.account.sign_transaction(tx, self.private_key)
-        transaction_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
-        return transaction_hash
+            signed_tx = w3.eth.account.sign_transaction(tx, self.private_key)
+            transaction_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+            return transaction_hash
+        except ValueError as e:
+            print(f"Invalid value: {e}")
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
 
     def delete_transaction(self, filename):
-        nonce = w3.eth.get_transaction_count(self.wallet_address)
+        try:
+            nonce = w3.eth.get_transaction_count(self.wallet_address)
 
-        contract = w3.eth.contract(address=sepolia_address, abi=SEPOLIA_ABI)
-        tx = contract.functions.deleteFile(filename).build_transaction({
-            'chainId': 11155111,
-            'gas': 30000000,
-            'nonce': nonce,
-        })
+            contract = w3.eth.contract(address=sepolia_address, abi=SEPOLIA_ABI)
+            tx = contract.functions.deleteFile(filename).build_transaction({
+                'chainId': 11155111,
+                'gas': 30000000,
+                'nonce': nonce,
+            })
 
-        signed_tx = w3.eth.account.sign_transaction(tx, self.private_key)
-        transaction_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
-        return transaction_hash
+            signed_tx = w3.eth.account.sign_transaction(tx, self.private_key)
+            transaction_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+            return transaction_hash
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
 
     def listen_to_events(self):
         try:
@@ -198,7 +301,6 @@ class TransactionManager:
                 print(f"For file: {event['args']['filename']}")
         except Exception as e:
             print(f"An error occurred: {e}")
-
 
 
 transaction_manager = TransactionManager(wallet_address, private_key)
@@ -262,8 +364,6 @@ def upload_music():
 
     return render_template('upload.html', form=form)
 
-from hexbytes import HexBytes
-
 @app.route('/delete/<filename>', methods=['POST'])
 def delete_music(filename):
     # Verificăm dacă fișierul există în baza de date și dacă utilizatorul este proprietarul fișierului
@@ -295,7 +395,6 @@ if __name__ == '__main__':
     # Ascultă evenimentele Sepolia într-un thread separat
     
     event_thread = threading.Thread(target=partial(transaction_manager.listen_to_events))
-
     event_thread.start()
 
     app.run(debug=True)

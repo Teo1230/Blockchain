@@ -87,9 +87,9 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.21+commit.d9974bed\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_musicContractAddress\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"name\":\"audioFiles\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"musicContract\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"votes\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"exists\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"filename\",\"type\":\"string\"}],\"name\":\"getVotesForAudioFile\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"musicContract\",\"outputs\":[{\"internalType\":\"contract MusicContract\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"filename\",\"type\":\"string\"}],\"name\":\"voteForAudioFile\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/VotingContract.sol\":\"VotingContract\"},\"evmVersion\":\"shanghai\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/LibraryContract.sol\":{\"keccak256\":\"0xb6a165decb851f7c389e7d79e2632de25a118d96289fd7b172f459bfd87a91c1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://98f3485c2e9ce0b3fa0c9209cb84c6f105f0a6af647c811e2b72c1e87989f05c\",\"dweb:/ipfs/QmZHX5oZFji7Nst1xRib85tGrtQRumgTZgoQ6wsioEzHN1\"]},\"project:/contracts/MusicContract.sol\":{\"keccak256\":\"0xf2c70891f0fd10ed6ce0f24cbaae93d08f50ff48b3b0ee2508d6f7b78cdc5de1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://3ef03c03af355dcdb58e179417f38ccfba7de123d48d93cf1a2bbce8e5f50a22\",\"dweb:/ipfs/QmZ77rn61UerBW5d357XckGD8xcxzMsK5nKBLTyYBXunvt\"]},\"project:/contracts/VotingContract.sol\":{\"keccak256\":\"0xf659479e17d8637144b0680ce0f4ee5f7a2736a0bf6aaa7ff7eb6e7d056dee59\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://d1e99c642fdfdd146582c0caff17382b2eb25fad0e65aa828a65ce0bb61f0877\",\"dweb:/ipfs/QmZ2vwfxykTxGmB5PwZMbJunRuAuGuq2Sx5C3asQMPrtn9\"]},\"project:/contracts/WithdrawalContract.sol\":{\"keccak256\":\"0x2a7cf5b55400b70f3c69f523594acdc9310f8ae84048e0dab35d5f733da30e75\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://30d8d515315d59e0f1b975afb071cbea4a94237af88aa2c08b6561226729cf23\",\"dweb:/ipfs/QmNsYeiTSr3Woqqfbf3NYq6m2QmofAsEj5jxrXMMweUztq\"]}},\"version\":1}",
-  "bytecode": "0x608060405234801561000f575f80fd5b50604051610a94380380610a94833981810160405281019061003191906100d5565b8060015f6101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555050610100565b5f80fd5b5f73ffffffffffffffffffffffffffffffffffffffff82169050919050565b5f6100a48261007b565b9050919050565b6100b48161009a565b81146100be575f80fd5b50565b5f815190506100cf816100ab565b92915050565b5f602082840312156100ea576100e9610077565b5b5f6100f7848285016100c1565b91505092915050565b6109878061010d5f395ff3fe608060405234801561000f575f80fd5b506004361061004a575f3560e01c80630c9550451461004e57806314fb54ef1461006a57806372898dd11461009a5780638f7434b6146100b8575b5f80fd5b610068600480360381019061006391906105bc565b6100ea565b005b610084600480360381019061007f91906105bc565b6102b1565b604051610091919061061b565b60405180910390f35b6100a26103e2565b6040516100af91906106ae565b60405180910390f35b6100d260048036038101906100cd91906105bc565b610407565b6040516100e193929190610701565b60405180910390f35b805f73ffffffffffffffffffffffffffffffffffffffff1660015f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663b830facb836040518263ffffffff1660e01b815260040161015c91906107b0565b602060405180830381865afa158015610177573d5f803e3d5ffd5b505050506040513d601f19601f8201168201806040525081019061019b91906107fa565b73ffffffffffffffffffffffffffffffffffffffff16036101f1576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016101e89061086f565b60405180910390fd5b5f8260405161020091906108c7565b90815260200160405180910390206001015f8154809291906102219061090a565b919050555060015f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663d6f65380836040518263ffffffff1660e01b815260040161028091906107b0565b5f604051808303815f87803b158015610297575f80fd5b505af11580156102a9573d5f803e3d5ffd5b505050505050565b5f815f73ffffffffffffffffffffffffffffffffffffffff1660015f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663b830facb836040518263ffffffff1660e01b815260040161032491906107b0565b602060405180830381865afa15801561033f573d5f803e3d5ffd5b505050506040513d601f19601f8201168201806040525081019061036391906107fa565b73ffffffffffffffffffffffffffffffffffffffff16036103b9576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016103b09061086f565b60405180910390fd5b5f836040516103c891906108c7565b908152602001604051809103902060010154915050919050565b60015f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b5f818051602081018201805184825260208301602085012081835280955050505050505f91509050805f015f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1690806001015490806002015f9054906101000a900460ff16905083565b5f604051905090565b5f80fd5b5f80fd5b5f80fd5b5f80fd5b5f601f19601f8301169050919050565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52604160045260245ffd5b6104ce82610488565b810181811067ffffffffffffffff821117156104ed576104ec610498565b5b80604052505050565b5f6104ff61046f565b905061050b82826104c5565b919050565b5f67ffffffffffffffff82111561052a57610529610498565b5b61053382610488565b9050602081019050919050565b828183375f83830152505050565b5f61056061055b84610510565b6104f6565b90508281526020810184848401111561057c5761057b610484565b5b610587848285610540565b509392505050565b5f82601f8301126105a3576105a2610480565b5b81356105b384826020860161054e565b91505092915050565b5f602082840312156105d1576105d0610478565b5b5f82013567ffffffffffffffff8111156105ee576105ed61047c565b5b6105fa8482850161058f565b91505092915050565b5f819050919050565b61061581610603565b82525050565b5f60208201905061062e5f83018461060c565b92915050565b5f73ffffffffffffffffffffffffffffffffffffffff82169050919050565b5f819050919050565b5f61067661067161066c84610634565b610653565b610634565b9050919050565b5f6106878261065c565b9050919050565b5f6106988261067d565b9050919050565b6106a88161068e565b82525050565b5f6020820190506106c15f83018461069f565b92915050565b5f6106d182610634565b9050919050565b6106e1816106c7565b82525050565b5f8115159050919050565b6106fb816106e7565b82525050565b5f6060820190506107145f8301866106d8565b610721602083018561060c565b61072e60408301846106f2565b949350505050565b5f81519050919050565b5f82825260208201905092915050565b5f5b8381101561076d578082015181840152602081019050610752565b5f8484015250505050565b5f61078282610736565b61078c8185610740565b935061079c818560208601610750565b6107a581610488565b840191505092915050565b5f6020820190508181035f8301526107c88184610778565b905092915050565b6107d9816106c7565b81146107e3575f80fd5b50565b5f815190506107f4816107d0565b92915050565b5f6020828403121561080f5761080e610478565b5b5f61081c848285016107e6565b91505092915050565b7f46696c6520646f6573206e6f74206578697374000000000000000000000000005f82015250565b5f610859601383610740565b915061086482610825565b602082019050919050565b5f6020820190508181035f8301526108868161084d565b9050919050565b5f81905092915050565b5f6108a182610736565b6108ab818561088d565b93506108bb818560208601610750565b80840191505092915050565b5f6108d28284610897565b915081905092915050565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52601160045260245ffd5b5f61091482610603565b91507fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff8203610946576109456108dd565b5b60018201905091905056fea26469706673582212208ec2b18f2a5e65aba63187c94cabc9059dd6182d130d6b75d45e5605bcf9865064736f6c63430008150033",
-  "deployedBytecode": "0x608060405234801561000f575f80fd5b506004361061004a575f3560e01c80630c9550451461004e57806314fb54ef1461006a57806372898dd11461009a5780638f7434b6146100b8575b5f80fd5b610068600480360381019061006391906105bc565b6100ea565b005b610084600480360381019061007f91906105bc565b6102b1565b604051610091919061061b565b60405180910390f35b6100a26103e2565b6040516100af91906106ae565b60405180910390f35b6100d260048036038101906100cd91906105bc565b610407565b6040516100e193929190610701565b60405180910390f35b805f73ffffffffffffffffffffffffffffffffffffffff1660015f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663b830facb836040518263ffffffff1660e01b815260040161015c91906107b0565b602060405180830381865afa158015610177573d5f803e3d5ffd5b505050506040513d601f19601f8201168201806040525081019061019b91906107fa565b73ffffffffffffffffffffffffffffffffffffffff16036101f1576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016101e89061086f565b60405180910390fd5b5f8260405161020091906108c7565b90815260200160405180910390206001015f8154809291906102219061090a565b919050555060015f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663d6f65380836040518263ffffffff1660e01b815260040161028091906107b0565b5f604051808303815f87803b158015610297575f80fd5b505af11580156102a9573d5f803e3d5ffd5b505050505050565b5f815f73ffffffffffffffffffffffffffffffffffffffff1660015f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663b830facb836040518263ffffffff1660e01b815260040161032491906107b0565b602060405180830381865afa15801561033f573d5f803e3d5ffd5b505050506040513d601f19601f8201168201806040525081019061036391906107fa565b73ffffffffffffffffffffffffffffffffffffffff16036103b9576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016103b09061086f565b60405180910390fd5b5f836040516103c891906108c7565b908152602001604051809103902060010154915050919050565b60015f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b5f818051602081018201805184825260208301602085012081835280955050505050505f91509050805f015f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1690806001015490806002015f9054906101000a900460ff16905083565b5f604051905090565b5f80fd5b5f80fd5b5f80fd5b5f80fd5b5f601f19601f8301169050919050565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52604160045260245ffd5b6104ce82610488565b810181811067ffffffffffffffff821117156104ed576104ec610498565b5b80604052505050565b5f6104ff61046f565b905061050b82826104c5565b919050565b5f67ffffffffffffffff82111561052a57610529610498565b5b61053382610488565b9050602081019050919050565b828183375f83830152505050565b5f61056061055b84610510565b6104f6565b90508281526020810184848401111561057c5761057b610484565b5b610587848285610540565b509392505050565b5f82601f8301126105a3576105a2610480565b5b81356105b384826020860161054e565b91505092915050565b5f602082840312156105d1576105d0610478565b5b5f82013567ffffffffffffffff8111156105ee576105ed61047c565b5b6105fa8482850161058f565b91505092915050565b5f819050919050565b61061581610603565b82525050565b5f60208201905061062e5f83018461060c565b92915050565b5f73ffffffffffffffffffffffffffffffffffffffff82169050919050565b5f819050919050565b5f61067661067161066c84610634565b610653565b610634565b9050919050565b5f6106878261065c565b9050919050565b5f6106988261067d565b9050919050565b6106a88161068e565b82525050565b5f6020820190506106c15f83018461069f565b92915050565b5f6106d182610634565b9050919050565b6106e1816106c7565b82525050565b5f8115159050919050565b6106fb816106e7565b82525050565b5f6060820190506107145f8301866106d8565b610721602083018561060c565b61072e60408301846106f2565b949350505050565b5f81519050919050565b5f82825260208201905092915050565b5f5b8381101561076d578082015181840152602081019050610752565b5f8484015250505050565b5f61078282610736565b61078c8185610740565b935061079c818560208601610750565b6107a581610488565b840191505092915050565b5f6020820190508181035f8301526107c88184610778565b905092915050565b6107d9816106c7565b81146107e3575f80fd5b50565b5f815190506107f4816107d0565b92915050565b5f6020828403121561080f5761080e610478565b5b5f61081c848285016107e6565b91505092915050565b7f46696c6520646f6573206e6f74206578697374000000000000000000000000005f82015250565b5f610859601383610740565b915061086482610825565b602082019050919050565b5f6020820190508181035f8301526108868161084d565b9050919050565b5f81905092915050565b5f6108a182610736565b6108ab818561088d565b93506108bb818560208601610750565b80840191505092915050565b5f6108d28284610897565b915081905092915050565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52601160045260245ffd5b5f61091482610603565b91507fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff8203610946576109456108dd565b5b60018201905091905056fea26469706673582212208ec2b18f2a5e65aba63187c94cabc9059dd6182d130d6b75d45e5605bcf9865064736f6c63430008150033",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.21+commit.d9974bed\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_musicContractAddress\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"name\":\"audioFiles\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"musicContract\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"votes\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"exists\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"filename\",\"type\":\"string\"}],\"name\":\"getVotesForAudioFile\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"musicContract\",\"outputs\":[{\"internalType\":\"contract MusicContract\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"filename\",\"type\":\"string\"}],\"name\":\"voteForAudioFile\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/VotingContract.sol\":\"VotingContract\"},\"evmVersion\":\"shanghai\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/LibraryContract.sol\":{\"keccak256\":\"0xb6a165decb851f7c389e7d79e2632de25a118d96289fd7b172f459bfd87a91c1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://98f3485c2e9ce0b3fa0c9209cb84c6f105f0a6af647c811e2b72c1e87989f05c\",\"dweb:/ipfs/QmZHX5oZFji7Nst1xRib85tGrtQRumgTZgoQ6wsioEzHN1\"]},\"project:/contracts/MusicContract.sol\":{\"keccak256\":\"0xf95f20357fbefe529d7f00586f72da0337d70175c01baa0eb712b8899b355f64\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://25d3f7e8b797bf136a0838859a1d533c506286e901b99ab64cf7d750ce732023\",\"dweb:/ipfs/QmUqurC1Gj1ikGrTeEHC7YxVvdJs7162RRe4KT7AbPcUgt\"]},\"project:/contracts/VotingContract.sol\":{\"keccak256\":\"0xf659479e17d8637144b0680ce0f4ee5f7a2736a0bf6aaa7ff7eb6e7d056dee59\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://d1e99c642fdfdd146582c0caff17382b2eb25fad0e65aa828a65ce0bb61f0877\",\"dweb:/ipfs/QmZ2vwfxykTxGmB5PwZMbJunRuAuGuq2Sx5C3asQMPrtn9\"]},\"project:/contracts/WithdrawalContract.sol\":{\"keccak256\":\"0x4621cc0b02be64b4e31f56eaa4c2844c8ef42565fb51ad09e4a06e0b718648a4\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://b48015617a8beef968f4bd37dc68e06ac0ed849133fa4ccad4be5a96a36220b3\",\"dweb:/ipfs/QmU1u3rastrNAk3sX7yNDcPWYrXYdSyxMVCus6R66NhhtP\"]}},\"version\":1}",
+  "bytecode": "0x608060405234801561000f575f80fd5b50604051610a94380380610a94833981810160405281019061003191906100d5565b8060015f6101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555050610100565b5f80fd5b5f73ffffffffffffffffffffffffffffffffffffffff82169050919050565b5f6100a48261007b565b9050919050565b6100b48161009a565b81146100be575f80fd5b50565b5f815190506100cf816100ab565b92915050565b5f602082840312156100ea576100e9610077565b5b5f6100f7848285016100c1565b91505092915050565b6109878061010d5f395ff3fe608060405234801561000f575f80fd5b506004361061004a575f3560e01c80630c9550451461004e57806314fb54ef1461006a57806372898dd11461009a5780638f7434b6146100b8575b5f80fd5b610068600480360381019061006391906105bc565b6100ea565b005b610084600480360381019061007f91906105bc565b6102b1565b604051610091919061061b565b60405180910390f35b6100a26103e2565b6040516100af91906106ae565b60405180910390f35b6100d260048036038101906100cd91906105bc565b610407565b6040516100e193929190610701565b60405180910390f35b805f73ffffffffffffffffffffffffffffffffffffffff1660015f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663b830facb836040518263ffffffff1660e01b815260040161015c91906107b0565b602060405180830381865afa158015610177573d5f803e3d5ffd5b505050506040513d601f19601f8201168201806040525081019061019b91906107fa565b73ffffffffffffffffffffffffffffffffffffffff16036101f1576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016101e89061086f565b60405180910390fd5b5f8260405161020091906108c7565b90815260200160405180910390206001015f8154809291906102219061090a565b919050555060015f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663d6f65380836040518263ffffffff1660e01b815260040161028091906107b0565b5f604051808303815f87803b158015610297575f80fd5b505af11580156102a9573d5f803e3d5ffd5b505050505050565b5f815f73ffffffffffffffffffffffffffffffffffffffff1660015f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663b830facb836040518263ffffffff1660e01b815260040161032491906107b0565b602060405180830381865afa15801561033f573d5f803e3d5ffd5b505050506040513d601f19601f8201168201806040525081019061036391906107fa565b73ffffffffffffffffffffffffffffffffffffffff16036103b9576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016103b09061086f565b60405180910390fd5b5f836040516103c891906108c7565b908152602001604051809103902060010154915050919050565b60015f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b5f818051602081018201805184825260208301602085012081835280955050505050505f91509050805f015f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1690806001015490806002015f9054906101000a900460ff16905083565b5f604051905090565b5f80fd5b5f80fd5b5f80fd5b5f80fd5b5f601f19601f8301169050919050565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52604160045260245ffd5b6104ce82610488565b810181811067ffffffffffffffff821117156104ed576104ec610498565b5b80604052505050565b5f6104ff61046f565b905061050b82826104c5565b919050565b5f67ffffffffffffffff82111561052a57610529610498565b5b61053382610488565b9050602081019050919050565b828183375f83830152505050565b5f61056061055b84610510565b6104f6565b90508281526020810184848401111561057c5761057b610484565b5b610587848285610540565b509392505050565b5f82601f8301126105a3576105a2610480565b5b81356105b384826020860161054e565b91505092915050565b5f602082840312156105d1576105d0610478565b5b5f82013567ffffffffffffffff8111156105ee576105ed61047c565b5b6105fa8482850161058f565b91505092915050565b5f819050919050565b61061581610603565b82525050565b5f60208201905061062e5f83018461060c565b92915050565b5f73ffffffffffffffffffffffffffffffffffffffff82169050919050565b5f819050919050565b5f61067661067161066c84610634565b610653565b610634565b9050919050565b5f6106878261065c565b9050919050565b5f6106988261067d565b9050919050565b6106a88161068e565b82525050565b5f6020820190506106c15f83018461069f565b92915050565b5f6106d182610634565b9050919050565b6106e1816106c7565b82525050565b5f8115159050919050565b6106fb816106e7565b82525050565b5f6060820190506107145f8301866106d8565b610721602083018561060c565b61072e60408301846106f2565b949350505050565b5f81519050919050565b5f82825260208201905092915050565b5f5b8381101561076d578082015181840152602081019050610752565b5f8484015250505050565b5f61078282610736565b61078c8185610740565b935061079c818560208601610750565b6107a581610488565b840191505092915050565b5f6020820190508181035f8301526107c88184610778565b905092915050565b6107d9816106c7565b81146107e3575f80fd5b50565b5f815190506107f4816107d0565b92915050565b5f6020828403121561080f5761080e610478565b5b5f61081c848285016107e6565b91505092915050565b7f46696c6520646f6573206e6f74206578697374000000000000000000000000005f82015250565b5f610859601383610740565b915061086482610825565b602082019050919050565b5f6020820190508181035f8301526108868161084d565b9050919050565b5f81905092915050565b5f6108a182610736565b6108ab818561088d565b93506108bb818560208601610750565b80840191505092915050565b5f6108d28284610897565b915081905092915050565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52601160045260245ffd5b5f61091482610603565b91507fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff8203610946576109456108dd565b5b60018201905091905056fea264697066735822122088da0d52efe951a0effe5f90750a501cc2639752ca494a544b5d1a094a7a0b3264736f6c63430008150033",
+  "deployedBytecode": "0x608060405234801561000f575f80fd5b506004361061004a575f3560e01c80630c9550451461004e57806314fb54ef1461006a57806372898dd11461009a5780638f7434b6146100b8575b5f80fd5b610068600480360381019061006391906105bc565b6100ea565b005b610084600480360381019061007f91906105bc565b6102b1565b604051610091919061061b565b60405180910390f35b6100a26103e2565b6040516100af91906106ae565b60405180910390f35b6100d260048036038101906100cd91906105bc565b610407565b6040516100e193929190610701565b60405180910390f35b805f73ffffffffffffffffffffffffffffffffffffffff1660015f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663b830facb836040518263ffffffff1660e01b815260040161015c91906107b0565b602060405180830381865afa158015610177573d5f803e3d5ffd5b505050506040513d601f19601f8201168201806040525081019061019b91906107fa565b73ffffffffffffffffffffffffffffffffffffffff16036101f1576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016101e89061086f565b60405180910390fd5b5f8260405161020091906108c7565b90815260200160405180910390206001015f8154809291906102219061090a565b919050555060015f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663d6f65380836040518263ffffffff1660e01b815260040161028091906107b0565b5f604051808303815f87803b158015610297575f80fd5b505af11580156102a9573d5f803e3d5ffd5b505050505050565b5f815f73ffffffffffffffffffffffffffffffffffffffff1660015f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663b830facb836040518263ffffffff1660e01b815260040161032491906107b0565b602060405180830381865afa15801561033f573d5f803e3d5ffd5b505050506040513d601f19601f8201168201806040525081019061036391906107fa565b73ffffffffffffffffffffffffffffffffffffffff16036103b9576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016103b09061086f565b60405180910390fd5b5f836040516103c891906108c7565b908152602001604051809103902060010154915050919050565b60015f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b5f818051602081018201805184825260208301602085012081835280955050505050505f91509050805f015f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1690806001015490806002015f9054906101000a900460ff16905083565b5f604051905090565b5f80fd5b5f80fd5b5f80fd5b5f80fd5b5f601f19601f8301169050919050565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52604160045260245ffd5b6104ce82610488565b810181811067ffffffffffffffff821117156104ed576104ec610498565b5b80604052505050565b5f6104ff61046f565b905061050b82826104c5565b919050565b5f67ffffffffffffffff82111561052a57610529610498565b5b61053382610488565b9050602081019050919050565b828183375f83830152505050565b5f61056061055b84610510565b6104f6565b90508281526020810184848401111561057c5761057b610484565b5b610587848285610540565b509392505050565b5f82601f8301126105a3576105a2610480565b5b81356105b384826020860161054e565b91505092915050565b5f602082840312156105d1576105d0610478565b5b5f82013567ffffffffffffffff8111156105ee576105ed61047c565b5b6105fa8482850161058f565b91505092915050565b5f819050919050565b61061581610603565b82525050565b5f60208201905061062e5f83018461060c565b92915050565b5f73ffffffffffffffffffffffffffffffffffffffff82169050919050565b5f819050919050565b5f61067661067161066c84610634565b610653565b610634565b9050919050565b5f6106878261065c565b9050919050565b5f6106988261067d565b9050919050565b6106a88161068e565b82525050565b5f6020820190506106c15f83018461069f565b92915050565b5f6106d182610634565b9050919050565b6106e1816106c7565b82525050565b5f8115159050919050565b6106fb816106e7565b82525050565b5f6060820190506107145f8301866106d8565b610721602083018561060c565b61072e60408301846106f2565b949350505050565b5f81519050919050565b5f82825260208201905092915050565b5f5b8381101561076d578082015181840152602081019050610752565b5f8484015250505050565b5f61078282610736565b61078c8185610740565b935061079c818560208601610750565b6107a581610488565b840191505092915050565b5f6020820190508181035f8301526107c88184610778565b905092915050565b6107d9816106c7565b81146107e3575f80fd5b50565b5f815190506107f4816107d0565b92915050565b5f6020828403121561080f5761080e610478565b5b5f61081c848285016107e6565b91505092915050565b7f46696c6520646f6573206e6f74206578697374000000000000000000000000005f82015250565b5f610859601383610740565b915061086482610825565b602082019050919050565b5f6020820190508181035f8301526108868161084d565b9050919050565b5f81905092915050565b5f6108a182610736565b6108ab818561088d565b93506108bb818560208601610750565b80840191505092915050565b5f6108d28284610897565b915081905092915050565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52601160045260245ffd5b5f61091482610603565b91507fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff8203610946576109456108dd565b5b60018201905091905056fea264697066735822122088da0d52efe951a0effe5f90750a501cc2639752ca494a544b5d1a094a7a0b3264736f6c63430008150033",
   "immutableReferences": {},
   "generatedSources": [
     {
@@ -3193,7 +3193,7 @@
                 }
               ]
             },
-            "name": "convert_t_contract$_MusicContract_$247_to_t_address",
+            "name": "convert_t_contract$_MusicContract_$255_to_t_address",
             "nativeSrc": "3981:147:4",
             "nodeType": "YulFunctionDefinition",
             "parameters": [
@@ -3241,7 +3241,7 @@
                           }
                         ],
                         "functionName": {
-                          "name": "convert_t_contract$_MusicContract_$247_to_t_address",
+                          "name": "convert_t_contract$_MusicContract_$255_to_t_address",
                           "nativeSrc": "4242:51:4",
                           "nodeType": "YulIdentifier",
                           "src": "4242:51:4"
@@ -3267,7 +3267,7 @@
                 }
               ]
             },
-            "name": "abi_encode_t_contract$_MusicContract_$247_to_t_address_fromStack",
+            "name": "abi_encode_t_contract$_MusicContract_$255_to_t_address_fromStack",
             "nativeSrc": "4134:173:4",
             "nodeType": "YulFunctionDefinition",
             "parameters": [
@@ -3372,7 +3372,7 @@
                       }
                     ],
                     "functionName": {
-                      "name": "abi_encode_t_contract$_MusicContract_$247_to_t_address_fromStack",
+                      "name": "abi_encode_t_contract$_MusicContract_$255_to_t_address_fromStack",
                       "nativeSrc": "4478:64:4",
                       "nodeType": "YulIdentifier",
                       "src": "4478:64:4"
@@ -3387,7 +3387,7 @@
                 }
               ]
             },
-            "name": "abi_encode_tuple_t_contract$_MusicContract_$247__to_t_address__fromStack_reversed",
+            "name": "abi_encode_tuple_t_contract$_MusicContract_$255__to_t_address__fromStack_reversed",
             "nativeSrc": "4313:264:4",
             "nodeType": "YulFunctionDefinition",
             "parameters": [
@@ -6227,7 +6227,7 @@
           }
         ]
       },
-      "contents": "{\n\n    function allocate_unbounded() -> memPtr {\n        memPtr := mload(64)\n    }\n\n    function revert_error_dbdddcbe895c83990c08b3492a0e83918d802a52331272ac6fdb6a7c4aea3b1b() {\n        revert(0, 0)\n    }\n\n    function revert_error_c1322bf8034eace5e0b5c7295db60986aa89aae5e0ea0873e4689e076861a5db() {\n        revert(0, 0)\n    }\n\n    function revert_error_1b9f4a0a5773e33b91aa01db23bf8c55fce1411167c872835e7fa00a4f17d46d() {\n        revert(0, 0)\n    }\n\n    function revert_error_987264b3b1d58a9c7f8255e93e81c77d86d6299019c33110a076957a3e06e2ae() {\n        revert(0, 0)\n    }\n\n    function round_up_to_mul_of_32(value) -> result {\n        result := and(add(value, 31), not(31))\n    }\n\n    function panic_error_0x41() {\n        mstore(0, 35408467139433450592217433187231851964531694900788300625387963629091585785856)\n        mstore(4, 0x41)\n        revert(0, 0x24)\n    }\n\n    function finalize_allocation(memPtr, size) {\n        let newFreePtr := add(memPtr, round_up_to_mul_of_32(size))\n        // protect against overflow\n        if or(gt(newFreePtr, 0xffffffffffffffff), lt(newFreePtr, memPtr)) { panic_error_0x41() }\n        mstore(64, newFreePtr)\n    }\n\n    function allocate_memory(size) -> memPtr {\n        memPtr := allocate_unbounded()\n        finalize_allocation(memPtr, size)\n    }\n\n    function array_allocation_size_t_string_memory_ptr(length) -> size {\n        // Make sure we can allocate memory without overflow\n        if gt(length, 0xffffffffffffffff) { panic_error_0x41() }\n\n        size := round_up_to_mul_of_32(length)\n\n        // add length slot\n        size := add(size, 0x20)\n\n    }\n\n    function copy_calldata_to_memory_with_cleanup(src, dst, length) {\n        calldatacopy(dst, src, length)\n        mstore(add(dst, length), 0)\n    }\n\n    function abi_decode_available_length_t_string_memory_ptr(src, length, end) -> array {\n        array := allocate_memory(array_allocation_size_t_string_memory_ptr(length))\n        mstore(array, length)\n        let dst := add(array, 0x20)\n        if gt(add(src, length), end) { revert_error_987264b3b1d58a9c7f8255e93e81c77d86d6299019c33110a076957a3e06e2ae() }\n        copy_calldata_to_memory_with_cleanup(src, dst, length)\n    }\n\n    // string\n    function abi_decode_t_string_memory_ptr(offset, end) -> array {\n        if iszero(slt(add(offset, 0x1f), end)) { revert_error_1b9f4a0a5773e33b91aa01db23bf8c55fce1411167c872835e7fa00a4f17d46d() }\n        let length := calldataload(offset)\n        array := abi_decode_available_length_t_string_memory_ptr(add(offset, 0x20), length, end)\n    }\n\n    function abi_decode_tuple_t_string_memory_ptr(headStart, dataEnd) -> value0 {\n        if slt(sub(dataEnd, headStart), 32) { revert_error_dbdddcbe895c83990c08b3492a0e83918d802a52331272ac6fdb6a7c4aea3b1b() }\n\n        {\n\n            let offset := calldataload(add(headStart, 0))\n            if gt(offset, 0xffffffffffffffff) { revert_error_c1322bf8034eace5e0b5c7295db60986aa89aae5e0ea0873e4689e076861a5db() }\n\n            value0 := abi_decode_t_string_memory_ptr(add(headStart, offset), dataEnd)\n        }\n\n    }\n\n    function cleanup_t_uint256(value) -> cleaned {\n        cleaned := value\n    }\n\n    function abi_encode_t_uint256_to_t_uint256_fromStack(value, pos) {\n        mstore(pos, cleanup_t_uint256(value))\n    }\n\n    function abi_encode_tuple_t_uint256__to_t_uint256__fromStack_reversed(headStart , value0) -> tail {\n        tail := add(headStart, 32)\n\n        abi_encode_t_uint256_to_t_uint256_fromStack(value0,  add(headStart, 0))\n\n    }\n\n    function cleanup_t_uint160(value) -> cleaned {\n        cleaned := and(value, 0xffffffffffffffffffffffffffffffffffffffff)\n    }\n\n    function identity(value) -> ret {\n        ret := value\n    }\n\n    function convert_t_uint160_to_t_uint160(value) -> converted {\n        converted := cleanup_t_uint160(identity(cleanup_t_uint160(value)))\n    }\n\n    function convert_t_uint160_to_t_address(value) -> converted {\n        converted := convert_t_uint160_to_t_uint160(value)\n    }\n\n    function convert_t_contract$_MusicContract_$247_to_t_address(value) -> converted {\n        converted := convert_t_uint160_to_t_address(value)\n    }\n\n    function abi_encode_t_contract$_MusicContract_$247_to_t_address_fromStack(value, pos) {\n        mstore(pos, convert_t_contract$_MusicContract_$247_to_t_address(value))\n    }\n\n    function abi_encode_tuple_t_contract$_MusicContract_$247__to_t_address__fromStack_reversed(headStart , value0) -> tail {\n        tail := add(headStart, 32)\n\n        abi_encode_t_contract$_MusicContract_$247_to_t_address_fromStack(value0,  add(headStart, 0))\n\n    }\n\n    function cleanup_t_address(value) -> cleaned {\n        cleaned := cleanup_t_uint160(value)\n    }\n\n    function abi_encode_t_address_to_t_address_fromStack(value, pos) {\n        mstore(pos, cleanup_t_address(value))\n    }\n\n    function cleanup_t_bool(value) -> cleaned {\n        cleaned := iszero(iszero(value))\n    }\n\n    function abi_encode_t_bool_to_t_bool_fromStack(value, pos) {\n        mstore(pos, cleanup_t_bool(value))\n    }\n\n    function abi_encode_tuple_t_address_t_uint256_t_bool__to_t_address_t_uint256_t_bool__fromStack_reversed(headStart , value2, value1, value0) -> tail {\n        tail := add(headStart, 96)\n\n        abi_encode_t_address_to_t_address_fromStack(value0,  add(headStart, 0))\n\n        abi_encode_t_uint256_to_t_uint256_fromStack(value1,  add(headStart, 32))\n\n        abi_encode_t_bool_to_t_bool_fromStack(value2,  add(headStart, 64))\n\n    }\n\n    function array_length_t_string_memory_ptr(value) -> length {\n\n        length := mload(value)\n\n    }\n\n    function array_storeLengthForEncoding_t_string_memory_ptr_fromStack(pos, length) -> updated_pos {\n        mstore(pos, length)\n        updated_pos := add(pos, 0x20)\n    }\n\n    function copy_memory_to_memory_with_cleanup(src, dst, length) {\n        let i := 0\n        for { } lt(i, length) { i := add(i, 32) }\n        {\n            mstore(add(dst, i), mload(add(src, i)))\n        }\n        mstore(add(dst, length), 0)\n    }\n\n    function abi_encode_t_string_memory_ptr_to_t_string_memory_ptr_fromStack(value, pos) -> end {\n        let length := array_length_t_string_memory_ptr(value)\n        pos := array_storeLengthForEncoding_t_string_memory_ptr_fromStack(pos, length)\n        copy_memory_to_memory_with_cleanup(add(value, 0x20), pos, length)\n        end := add(pos, round_up_to_mul_of_32(length))\n    }\n\n    function abi_encode_tuple_t_string_memory_ptr__to_t_string_memory_ptr__fromStack_reversed(headStart , value0) -> tail {\n        tail := add(headStart, 32)\n\n        mstore(add(headStart, 0), sub(tail, headStart))\n        tail := abi_encode_t_string_memory_ptr_to_t_string_memory_ptr_fromStack(value0,  tail)\n\n    }\n\n    function validator_revert_t_address(value) {\n        if iszero(eq(value, cleanup_t_address(value))) { revert(0, 0) }\n    }\n\n    function abi_decode_t_address_fromMemory(offset, end) -> value {\n        value := mload(offset)\n        validator_revert_t_address(value)\n    }\n\n    function abi_decode_tuple_t_address_fromMemory(headStart, dataEnd) -> value0 {\n        if slt(sub(dataEnd, headStart), 32) { revert_error_dbdddcbe895c83990c08b3492a0e83918d802a52331272ac6fdb6a7c4aea3b1b() }\n\n        {\n\n            let offset := 0\n\n            value0 := abi_decode_t_address_fromMemory(add(headStart, offset), dataEnd)\n        }\n\n    }\n\n    function store_literal_in_memory_a2fc3f196ef4737de0b47fd71a414213fbe53d145a221c0d3a5505320477f037(memPtr) {\n\n        mstore(add(memPtr, 0), \"File does not exist\")\n\n    }\n\n    function abi_encode_t_stringliteral_a2fc3f196ef4737de0b47fd71a414213fbe53d145a221c0d3a5505320477f037_to_t_string_memory_ptr_fromStack(pos) -> end {\n        pos := array_storeLengthForEncoding_t_string_memory_ptr_fromStack(pos, 19)\n        store_literal_in_memory_a2fc3f196ef4737de0b47fd71a414213fbe53d145a221c0d3a5505320477f037(pos)\n        end := add(pos, 32)\n    }\n\n    function abi_encode_tuple_t_stringliteral_a2fc3f196ef4737de0b47fd71a414213fbe53d145a221c0d3a5505320477f037__to_t_string_memory_ptr__fromStack_reversed(headStart ) -> tail {\n        tail := add(headStart, 32)\n\n        mstore(add(headStart, 0), sub(tail, headStart))\n        tail := abi_encode_t_stringliteral_a2fc3f196ef4737de0b47fd71a414213fbe53d145a221c0d3a5505320477f037_to_t_string_memory_ptr_fromStack( tail)\n\n    }\n\n    function array_storeLengthForEncoding_t_string_memory_ptr_nonPadded_inplace_fromStack(pos, length) -> updated_pos {\n        updated_pos := pos\n    }\n\n    function abi_encode_t_string_memory_ptr_to_t_string_memory_ptr_nonPadded_inplace_fromStack(value, pos) -> end {\n        let length := array_length_t_string_memory_ptr(value)\n        pos := array_storeLengthForEncoding_t_string_memory_ptr_nonPadded_inplace_fromStack(pos, length)\n        copy_memory_to_memory_with_cleanup(add(value, 0x20), pos, length)\n        end := add(pos, length)\n    }\n\n    function abi_encode_tuple_packed_t_string_memory_ptr__to_t_string_memory_ptr__nonPadded_inplace_fromStack_reversed(pos , value0) -> end {\n\n        pos := abi_encode_t_string_memory_ptr_to_t_string_memory_ptr_nonPadded_inplace_fromStack(value0,  pos)\n\n        end := pos\n    }\n\n    function panic_error_0x11() {\n        mstore(0, 35408467139433450592217433187231851964531694900788300625387963629091585785856)\n        mstore(4, 0x11)\n        revert(0, 0x24)\n    }\n\n    function increment_t_uint256(value) -> ret {\n        value := cleanup_t_uint256(value)\n        if eq(value, 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff) { panic_error_0x11() }\n        ret := add(value, 1)\n    }\n\n}\n",
+      "contents": "{\n\n    function allocate_unbounded() -> memPtr {\n        memPtr := mload(64)\n    }\n\n    function revert_error_dbdddcbe895c83990c08b3492a0e83918d802a52331272ac6fdb6a7c4aea3b1b() {\n        revert(0, 0)\n    }\n\n    function revert_error_c1322bf8034eace5e0b5c7295db60986aa89aae5e0ea0873e4689e076861a5db() {\n        revert(0, 0)\n    }\n\n    function revert_error_1b9f4a0a5773e33b91aa01db23bf8c55fce1411167c872835e7fa00a4f17d46d() {\n        revert(0, 0)\n    }\n\n    function revert_error_987264b3b1d58a9c7f8255e93e81c77d86d6299019c33110a076957a3e06e2ae() {\n        revert(0, 0)\n    }\n\n    function round_up_to_mul_of_32(value) -> result {\n        result := and(add(value, 31), not(31))\n    }\n\n    function panic_error_0x41() {\n        mstore(0, 35408467139433450592217433187231851964531694900788300625387963629091585785856)\n        mstore(4, 0x41)\n        revert(0, 0x24)\n    }\n\n    function finalize_allocation(memPtr, size) {\n        let newFreePtr := add(memPtr, round_up_to_mul_of_32(size))\n        // protect against overflow\n        if or(gt(newFreePtr, 0xffffffffffffffff), lt(newFreePtr, memPtr)) { panic_error_0x41() }\n        mstore(64, newFreePtr)\n    }\n\n    function allocate_memory(size) -> memPtr {\n        memPtr := allocate_unbounded()\n        finalize_allocation(memPtr, size)\n    }\n\n    function array_allocation_size_t_string_memory_ptr(length) -> size {\n        // Make sure we can allocate memory without overflow\n        if gt(length, 0xffffffffffffffff) { panic_error_0x41() }\n\n        size := round_up_to_mul_of_32(length)\n\n        // add length slot\n        size := add(size, 0x20)\n\n    }\n\n    function copy_calldata_to_memory_with_cleanup(src, dst, length) {\n        calldatacopy(dst, src, length)\n        mstore(add(dst, length), 0)\n    }\n\n    function abi_decode_available_length_t_string_memory_ptr(src, length, end) -> array {\n        array := allocate_memory(array_allocation_size_t_string_memory_ptr(length))\n        mstore(array, length)\n        let dst := add(array, 0x20)\n        if gt(add(src, length), end) { revert_error_987264b3b1d58a9c7f8255e93e81c77d86d6299019c33110a076957a3e06e2ae() }\n        copy_calldata_to_memory_with_cleanup(src, dst, length)\n    }\n\n    // string\n    function abi_decode_t_string_memory_ptr(offset, end) -> array {\n        if iszero(slt(add(offset, 0x1f), end)) { revert_error_1b9f4a0a5773e33b91aa01db23bf8c55fce1411167c872835e7fa00a4f17d46d() }\n        let length := calldataload(offset)\n        array := abi_decode_available_length_t_string_memory_ptr(add(offset, 0x20), length, end)\n    }\n\n    function abi_decode_tuple_t_string_memory_ptr(headStart, dataEnd) -> value0 {\n        if slt(sub(dataEnd, headStart), 32) { revert_error_dbdddcbe895c83990c08b3492a0e83918d802a52331272ac6fdb6a7c4aea3b1b() }\n\n        {\n\n            let offset := calldataload(add(headStart, 0))\n            if gt(offset, 0xffffffffffffffff) { revert_error_c1322bf8034eace5e0b5c7295db60986aa89aae5e0ea0873e4689e076861a5db() }\n\n            value0 := abi_decode_t_string_memory_ptr(add(headStart, offset), dataEnd)\n        }\n\n    }\n\n    function cleanup_t_uint256(value) -> cleaned {\n        cleaned := value\n    }\n\n    function abi_encode_t_uint256_to_t_uint256_fromStack(value, pos) {\n        mstore(pos, cleanup_t_uint256(value))\n    }\n\n    function abi_encode_tuple_t_uint256__to_t_uint256__fromStack_reversed(headStart , value0) -> tail {\n        tail := add(headStart, 32)\n\n        abi_encode_t_uint256_to_t_uint256_fromStack(value0,  add(headStart, 0))\n\n    }\n\n    function cleanup_t_uint160(value) -> cleaned {\n        cleaned := and(value, 0xffffffffffffffffffffffffffffffffffffffff)\n    }\n\n    function identity(value) -> ret {\n        ret := value\n    }\n\n    function convert_t_uint160_to_t_uint160(value) -> converted {\n        converted := cleanup_t_uint160(identity(cleanup_t_uint160(value)))\n    }\n\n    function convert_t_uint160_to_t_address(value) -> converted {\n        converted := convert_t_uint160_to_t_uint160(value)\n    }\n\n    function convert_t_contract$_MusicContract_$255_to_t_address(value) -> converted {\n        converted := convert_t_uint160_to_t_address(value)\n    }\n\n    function abi_encode_t_contract$_MusicContract_$255_to_t_address_fromStack(value, pos) {\n        mstore(pos, convert_t_contract$_MusicContract_$255_to_t_address(value))\n    }\n\n    function abi_encode_tuple_t_contract$_MusicContract_$255__to_t_address__fromStack_reversed(headStart , value0) -> tail {\n        tail := add(headStart, 32)\n\n        abi_encode_t_contract$_MusicContract_$255_to_t_address_fromStack(value0,  add(headStart, 0))\n\n    }\n\n    function cleanup_t_address(value) -> cleaned {\n        cleaned := cleanup_t_uint160(value)\n    }\n\n    function abi_encode_t_address_to_t_address_fromStack(value, pos) {\n        mstore(pos, cleanup_t_address(value))\n    }\n\n    function cleanup_t_bool(value) -> cleaned {\n        cleaned := iszero(iszero(value))\n    }\n\n    function abi_encode_t_bool_to_t_bool_fromStack(value, pos) {\n        mstore(pos, cleanup_t_bool(value))\n    }\n\n    function abi_encode_tuple_t_address_t_uint256_t_bool__to_t_address_t_uint256_t_bool__fromStack_reversed(headStart , value2, value1, value0) -> tail {\n        tail := add(headStart, 96)\n\n        abi_encode_t_address_to_t_address_fromStack(value0,  add(headStart, 0))\n\n        abi_encode_t_uint256_to_t_uint256_fromStack(value1,  add(headStart, 32))\n\n        abi_encode_t_bool_to_t_bool_fromStack(value2,  add(headStart, 64))\n\n    }\n\n    function array_length_t_string_memory_ptr(value) -> length {\n\n        length := mload(value)\n\n    }\n\n    function array_storeLengthForEncoding_t_string_memory_ptr_fromStack(pos, length) -> updated_pos {\n        mstore(pos, length)\n        updated_pos := add(pos, 0x20)\n    }\n\n    function copy_memory_to_memory_with_cleanup(src, dst, length) {\n        let i := 0\n        for { } lt(i, length) { i := add(i, 32) }\n        {\n            mstore(add(dst, i), mload(add(src, i)))\n        }\n        mstore(add(dst, length), 0)\n    }\n\n    function abi_encode_t_string_memory_ptr_to_t_string_memory_ptr_fromStack(value, pos) -> end {\n        let length := array_length_t_string_memory_ptr(value)\n        pos := array_storeLengthForEncoding_t_string_memory_ptr_fromStack(pos, length)\n        copy_memory_to_memory_with_cleanup(add(value, 0x20), pos, length)\n        end := add(pos, round_up_to_mul_of_32(length))\n    }\n\n    function abi_encode_tuple_t_string_memory_ptr__to_t_string_memory_ptr__fromStack_reversed(headStart , value0) -> tail {\n        tail := add(headStart, 32)\n\n        mstore(add(headStart, 0), sub(tail, headStart))\n        tail := abi_encode_t_string_memory_ptr_to_t_string_memory_ptr_fromStack(value0,  tail)\n\n    }\n\n    function validator_revert_t_address(value) {\n        if iszero(eq(value, cleanup_t_address(value))) { revert(0, 0) }\n    }\n\n    function abi_decode_t_address_fromMemory(offset, end) -> value {\n        value := mload(offset)\n        validator_revert_t_address(value)\n    }\n\n    function abi_decode_tuple_t_address_fromMemory(headStart, dataEnd) -> value0 {\n        if slt(sub(dataEnd, headStart), 32) { revert_error_dbdddcbe895c83990c08b3492a0e83918d802a52331272ac6fdb6a7c4aea3b1b() }\n\n        {\n\n            let offset := 0\n\n            value0 := abi_decode_t_address_fromMemory(add(headStart, offset), dataEnd)\n        }\n\n    }\n\n    function store_literal_in_memory_a2fc3f196ef4737de0b47fd71a414213fbe53d145a221c0d3a5505320477f037(memPtr) {\n\n        mstore(add(memPtr, 0), \"File does not exist\")\n\n    }\n\n    function abi_encode_t_stringliteral_a2fc3f196ef4737de0b47fd71a414213fbe53d145a221c0d3a5505320477f037_to_t_string_memory_ptr_fromStack(pos) -> end {\n        pos := array_storeLengthForEncoding_t_string_memory_ptr_fromStack(pos, 19)\n        store_literal_in_memory_a2fc3f196ef4737de0b47fd71a414213fbe53d145a221c0d3a5505320477f037(pos)\n        end := add(pos, 32)\n    }\n\n    function abi_encode_tuple_t_stringliteral_a2fc3f196ef4737de0b47fd71a414213fbe53d145a221c0d3a5505320477f037__to_t_string_memory_ptr__fromStack_reversed(headStart ) -> tail {\n        tail := add(headStart, 32)\n\n        mstore(add(headStart, 0), sub(tail, headStart))\n        tail := abi_encode_t_stringliteral_a2fc3f196ef4737de0b47fd71a414213fbe53d145a221c0d3a5505320477f037_to_t_string_memory_ptr_fromStack( tail)\n\n    }\n\n    function array_storeLengthForEncoding_t_string_memory_ptr_nonPadded_inplace_fromStack(pos, length) -> updated_pos {\n        updated_pos := pos\n    }\n\n    function abi_encode_t_string_memory_ptr_to_t_string_memory_ptr_nonPadded_inplace_fromStack(value, pos) -> end {\n        let length := array_length_t_string_memory_ptr(value)\n        pos := array_storeLengthForEncoding_t_string_memory_ptr_nonPadded_inplace_fromStack(pos, length)\n        copy_memory_to_memory_with_cleanup(add(value, 0x20), pos, length)\n        end := add(pos, length)\n    }\n\n    function abi_encode_tuple_packed_t_string_memory_ptr__to_t_string_memory_ptr__nonPadded_inplace_fromStack_reversed(pos , value0) -> end {\n\n        pos := abi_encode_t_string_memory_ptr_to_t_string_memory_ptr_nonPadded_inplace_fromStack(value0,  pos)\n\n        end := pos\n    }\n\n    function panic_error_0x11() {\n        mstore(0, 35408467139433450592217433187231851964531694900788300625387963629091585785856)\n        mstore(4, 0x11)\n        revert(0, 0x24)\n    }\n\n    function increment_t_uint256(value) -> ret {\n        value := cleanup_t_uint256(value)\n        if eq(value, 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff) { panic_error_0x11() }\n        ret := add(value, 1)\n    }\n\n}\n",
       "id": 4,
       "language": "Yul",
       "name": "#utility.yul"
@@ -6244,21 +6244,21 @@
         25
       ],
       "MusicContract": [
-        247
+        255
       ],
       "VotingContract": [
-        334
+        342
       ],
       "WithdrawalContract": [
-        391
+        399
       ]
     },
-    "id": 335,
+    "id": 343,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 249,
+        "id": 257,
         "literals": [
           "solidity",
           "^",
@@ -6271,11 +6271,11 @@
       {
         "absolutePath": "project:/contracts/MusicContract.sol",
         "file": "./MusicContract.sol",
-        "id": 250,
+        "id": 258,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 335,
-        "sourceUnit": 248,
+        "scope": 343,
+        "sourceUnit": 256,
         "src": "60:29:2",
         "symbolAliases": [],
         "unitAlias": ""
@@ -6287,9 +6287,9 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": true,
-        "id": 334,
+        "id": 342,
         "linearizedBaseContracts": [
-          334
+          342
         ],
         "name": "VotingContract",
         "nameLocation": "102:14:2",
@@ -6297,16 +6297,16 @@
         "nodes": [
           {
             "canonicalName": "VotingContract.AudioFile",
-            "id": 257,
+            "id": 265,
             "members": [
               {
                 "constant": false,
-                "id": 252,
+                "id": 260,
                 "mutability": "mutable",
                 "name": "musicContract",
                 "nameLocation": "160:13:2",
                 "nodeType": "VariableDeclaration",
-                "scope": 257,
+                "scope": 265,
                 "src": "152:21:2",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -6315,7 +6315,7 @@
                   "typeString": "address"
                 },
                 "typeName": {
-                  "id": 251,
+                  "id": 259,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
                   "src": "152:7:2",
@@ -6329,12 +6329,12 @@
               },
               {
                 "constant": false,
-                "id": 254,
+                "id": 262,
                 "mutability": "mutable",
                 "name": "votes",
                 "nameLocation": "258:5:2",
                 "nodeType": "VariableDeclaration",
-                "scope": 257,
+                "scope": 265,
                 "src": "250:13:2",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -6343,7 +6343,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 253,
+                  "id": 261,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "250:7:2",
@@ -6356,12 +6356,12 @@
               },
               {
                 "constant": false,
-                "id": 256,
+                "id": 264,
                 "mutability": "mutable",
                 "name": "exists",
                 "nameLocation": "279:6:2",
                 "nodeType": "VariableDeclaration",
-                "scope": 257,
+                "scope": 265,
                 "src": "274:11:2",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -6370,7 +6370,7 @@
                   "typeString": "bool"
                 },
                 "typeName": {
-                  "id": 255,
+                  "id": 263,
                   "name": "bool",
                   "nodeType": "ElementaryTypeName",
                   "src": "274:4:2",
@@ -6385,32 +6385,32 @@
             "name": "AudioFile",
             "nameLocation": "131:9:2",
             "nodeType": "StructDefinition",
-            "scope": 334,
+            "scope": 342,
             "src": "124:169:2",
             "visibility": "public"
           },
           {
             "constant": false,
             "functionSelector": "8f7434b6",
-            "id": 262,
+            "id": 270,
             "mutability": "mutable",
             "name": "audioFiles",
             "nameLocation": "337:10:2",
             "nodeType": "VariableDeclaration",
-            "scope": 334,
+            "scope": 342,
             "src": "301:46:2",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_mapping$_t_string_memory_ptr_$_t_struct$_AudioFile_$257_storage_$",
+              "typeIdentifier": "t_mapping$_t_string_memory_ptr_$_t_struct$_AudioFile_$265_storage_$",
               "typeString": "mapping(string => struct VotingContract.AudioFile)"
             },
             "typeName": {
-              "id": 261,
+              "id": 269,
               "keyName": "",
               "keyNameLocation": "-1:-1:-1",
               "keyType": {
-                "id": 258,
+                "id": 266,
                 "name": "string",
                 "nodeType": "ElementaryTypeName",
                 "src": "309:6:2",
@@ -6422,28 +6422,28 @@
               "nodeType": "Mapping",
               "src": "301:28:2",
               "typeDescriptions": {
-                "typeIdentifier": "t_mapping$_t_string_memory_ptr_$_t_struct$_AudioFile_$257_storage_$",
+                "typeIdentifier": "t_mapping$_t_string_memory_ptr_$_t_struct$_AudioFile_$265_storage_$",
                 "typeString": "mapping(string => struct VotingContract.AudioFile)"
               },
               "valueName": "",
               "valueNameLocation": "-1:-1:-1",
               "valueType": {
-                "id": 260,
+                "id": 268,
                 "nodeType": "UserDefinedTypeName",
                 "pathNode": {
-                  "id": 259,
+                  "id": 267,
                   "name": "AudioFile",
                   "nameLocations": [
                     "319:9:2"
                   ],
                   "nodeType": "IdentifierPath",
-                  "referencedDeclaration": 257,
+                  "referencedDeclaration": 265,
                   "src": "319:9:2"
                 },
-                "referencedDeclaration": 257,
+                "referencedDeclaration": 265,
                 "src": "319:9:2",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_AudioFile_$257_storage_ptr",
+                  "typeIdentifier": "t_struct$_AudioFile_$265_storage_ptr",
                   "typeString": "struct VotingContract.AudioFile"
                 }
               }
@@ -6453,36 +6453,36 @@
           {
             "constant": false,
             "functionSelector": "72898dd1",
-            "id": 265,
+            "id": 273,
             "mutability": "mutable",
             "name": "musicContract",
             "nameLocation": "375:13:2",
             "nodeType": "VariableDeclaration",
-            "scope": 334,
+            "scope": 342,
             "src": "354:34:2",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_MusicContract_$247",
+              "typeIdentifier": "t_contract$_MusicContract_$255",
               "typeString": "contract MusicContract"
             },
             "typeName": {
-              "id": 264,
+              "id": 272,
               "nodeType": "UserDefinedTypeName",
               "pathNode": {
-                "id": 263,
+                "id": 271,
                 "name": "MusicContract",
                 "nameLocations": [
                   "354:13:2"
                 ],
                 "nodeType": "IdentifierPath",
-                "referencedDeclaration": 247,
+                "referencedDeclaration": 255,
                 "src": "354:13:2"
               },
-              "referencedDeclaration": 247,
+              "referencedDeclaration": 255,
               "src": "354:13:2",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_MusicContract_$247",
+                "typeIdentifier": "t_contract$_MusicContract_$255",
                 "typeString": "contract MusicContract"
               }
             },
@@ -6490,26 +6490,26 @@
           },
           {
             "body": {
-              "id": 276,
+              "id": 284,
               "nodeType": "Block",
               "src": "487:71:2",
               "statements": [
                 {
                   "expression": {
-                    "id": 274,
+                    "id": 282,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
-                      "id": 270,
+                      "id": 278,
                       "name": "musicContract",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 265,
+                      "referencedDeclaration": 273,
                       "src": "498:13:2",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_MusicContract_$247",
+                        "typeIdentifier": "t_contract$_MusicContract_$255",
                         "typeString": "contract MusicContract"
                       }
                     },
@@ -6518,11 +6518,11 @@
                     "rightHandSide": {
                       "arguments": [
                         {
-                          "id": 272,
+                          "id": 280,
                           "name": "_musicContractAddress",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 267,
+                          "referencedDeclaration": 275,
                           "src": "528:21:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
@@ -6537,18 +6537,18 @@
                             "typeString": "address"
                           }
                         ],
-                        "id": 271,
+                        "id": 279,
                         "name": "MusicContract",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 247,
+                        "referencedDeclaration": 255,
                         "src": "514:13:2",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_MusicContract_$247_$",
+                          "typeIdentifier": "t_type$_t_contract$_MusicContract_$255_$",
                           "typeString": "type(contract MusicContract)"
                         }
                       },
-                      "id": 273,
+                      "id": 281,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -6560,23 +6560,23 @@
                       "src": "514:36:2",
                       "tryCall": false,
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_MusicContract_$247",
+                        "typeIdentifier": "t_contract$_MusicContract_$255",
                         "typeString": "contract MusicContract"
                       }
                     },
                     "src": "498:52:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_MusicContract_$247",
+                      "typeIdentifier": "t_contract$_MusicContract_$255",
                       "typeString": "contract MusicContract"
                     }
                   },
-                  "id": 275,
+                  "id": 283,
                   "nodeType": "ExpressionStatement",
                   "src": "498:52:2"
                 }
               ]
             },
-            "id": 277,
+            "id": 285,
             "implemented": true,
             "kind": "constructor",
             "modifiers": [],
@@ -6584,17 +6584,17 @@
             "nameLocation": "-1:-1:-1",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 268,
+              "id": 276,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 267,
+                  "id": 275,
                   "mutability": "mutable",
                   "name": "_musicContractAddress",
                   "nameLocation": "464:21:2",
                   "nodeType": "VariableDeclaration",
-                  "scope": 277,
+                  "scope": 285,
                   "src": "456:29:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -6603,7 +6603,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 266,
+                    "id": 274,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "456:7:2",
@@ -6619,12 +6619,12 @@
               "src": "455:31:2"
             },
             "returnParameters": {
-              "id": 269,
+              "id": 277,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "487:0:2"
             },
-            "scope": 334,
+            "scope": 342,
             "src": "444:114:2",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -6632,7 +6632,7 @@
           },
           {
             "body": {
-              "id": 295,
+              "id": 303,
               "nodeType": "Block",
               "src": "610:111:2",
               "statements": [
@@ -6644,7 +6644,7 @@
                           "typeIdentifier": "t_address",
                           "typeString": "address"
                         },
-                        "id": 290,
+                        "id": 298,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -6652,11 +6652,11 @@
                         "leftExpression": {
                           "arguments": [
                             {
-                              "id": 284,
+                              "id": 292,
                               "name": "filename",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 279,
+                              "referencedDeclaration": 287,
                               "src": "654:8:2",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_string_memory_ptr",
@@ -6672,18 +6672,18 @@
                               }
                             ],
                             "expression": {
-                              "id": 282,
+                              "id": 290,
                               "name": "musicContract",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 265,
+                              "referencedDeclaration": 273,
                               "src": "629:13:2",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_contract$_MusicContract_$247",
+                                "typeIdentifier": "t_contract$_MusicContract_$255",
                                 "typeString": "contract MusicContract"
                               }
                             },
-                            "id": 283,
+                            "id": 291,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
@@ -6698,7 +6698,7 @@
                               "typeString": "function (string memory) view external returns (address)"
                             }
                           },
-                          "id": 285,
+                          "id": 293,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -6720,7 +6720,7 @@
                           "arguments": [
                             {
                               "hexValue": "30",
-                              "id": 288,
+                              "id": 296,
                               "isConstant": false,
                               "isLValue": false,
                               "isPure": true,
@@ -6742,7 +6742,7 @@
                                 "typeString": "int_const 0"
                               }
                             ],
-                            "id": 287,
+                            "id": 295,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
@@ -6754,14 +6754,14 @@
                               "typeString": "type(address)"
                             },
                             "typeName": {
-                              "id": 286,
+                              "id": 294,
                               "name": "address",
                               "nodeType": "ElementaryTypeName",
                               "src": "667:7:2",
                               "typeDescriptions": {}
                             }
                           },
-                          "id": 289,
+                          "id": 297,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
@@ -6785,7 +6785,7 @@
                       },
                       {
                         "hexValue": "46696c6520646f6573206e6f74206578697374",
-                        "id": 291,
+                        "id": 299,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -6811,7 +6811,7 @@
                           "typeString": "literal_string \"File does not exist\""
                         }
                       ],
-                      "id": 281,
+                      "id": 289,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -6825,7 +6825,7 @@
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 292,
+                    "id": 300,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -6841,33 +6841,33 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 293,
+                  "id": 301,
                   "nodeType": "ExpressionStatement",
                   "src": "621:80:2"
                 },
                 {
-                  "id": 294,
+                  "id": 302,
                   "nodeType": "PlaceholderStatement",
                   "src": "712:1:2"
                 }
               ]
             },
-            "id": 296,
+            "id": 304,
             "name": "fileExists",
             "nameLocation": "575:10:2",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 280,
+              "id": 288,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 279,
+                  "id": 287,
                   "mutability": "mutable",
                   "name": "filename",
                   "nameLocation": "600:8:2",
                   "nodeType": "VariableDeclaration",
-                  "scope": 296,
+                  "scope": 304,
                   "src": "586:22:2",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -6876,7 +6876,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 278,
+                    "id": 286,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "586:6:2",
@@ -6896,13 +6896,13 @@
           },
           {
             "body": {
-              "id": 316,
+              "id": 324,
               "nodeType": "Block",
               "src": "809:98:2",
               "statements": [
                 {
                   "expression": {
-                    "id": 308,
+                    "id": 316,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -6914,24 +6914,24 @@
                     "subExpression": {
                       "expression": {
                         "baseExpression": {
-                          "id": 304,
+                          "id": 312,
                           "name": "audioFiles",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 262,
+                          "referencedDeclaration": 270,
                           "src": "820:10:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_mapping$_t_string_memory_ptr_$_t_struct$_AudioFile_$257_storage_$",
+                            "typeIdentifier": "t_mapping$_t_string_memory_ptr_$_t_struct$_AudioFile_$265_storage_$",
                             "typeString": "mapping(string memory => struct VotingContract.AudioFile storage ref)"
                           }
                         },
-                        "id": 306,
+                        "id": 314,
                         "indexExpression": {
-                          "id": 305,
+                          "id": 313,
                           "name": "filename",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 298,
+                          "referencedDeclaration": 306,
                           "src": "831:8:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_string_memory_ptr",
@@ -6945,11 +6945,11 @@
                         "nodeType": "IndexAccess",
                         "src": "820:20:2",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_AudioFile_$257_storage",
+                          "typeIdentifier": "t_struct$_AudioFile_$265_storage",
                           "typeString": "struct VotingContract.AudioFile storage ref"
                         }
                       },
-                      "id": 307,
+                      "id": 315,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
@@ -6957,7 +6957,7 @@
                       "memberLocation": "841:5:2",
                       "memberName": "votes",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 254,
+                      "referencedDeclaration": 262,
                       "src": "820:26:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
@@ -6969,7 +6969,7 @@
                       "typeString": "uint256"
                     }
                   },
-                  "id": 309,
+                  "id": 317,
                   "nodeType": "ExpressionStatement",
                   "src": "820:28:2"
                 },
@@ -6977,11 +6977,11 @@
                   "expression": {
                     "arguments": [
                       {
-                        "id": 313,
+                        "id": 321,
                         "name": "filename",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 298,
+                        "referencedDeclaration": 306,
                         "src": "890:8:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_string_memory_ptr",
@@ -6997,18 +6997,18 @@
                         }
                       ],
                       "expression": {
-                        "id": 310,
+                        "id": 318,
                         "name": "musicContract",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 265,
+                        "referencedDeclaration": 273,
                         "src": "859:13:2",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_MusicContract_$247",
+                          "typeIdentifier": "t_contract$_MusicContract_$255",
                           "typeString": "contract MusicContract"
                         }
                       },
-                      "id": 312,
+                      "id": 320,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -7016,14 +7016,14 @@
                       "memberLocation": "873:16:2",
                       "memberName": "notifyVoteCasted",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 189,
+                      "referencedDeclaration": 152,
                       "src": "859:30:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (string memory) external"
                       }
                     },
-                    "id": 314,
+                    "id": 322,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -7039,25 +7039,25 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 315,
+                  "id": 323,
                   "nodeType": "ExpressionStatement",
                   "src": "859:40:2"
                 }
               ]
             },
             "functionSelector": "0c955045",
-            "id": 317,
+            "id": 325,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
                 "arguments": [
                   {
-                    "id": 301,
+                    "id": 309,
                     "name": "filename",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 298,
+                    "referencedDeclaration": 306,
                     "src": "799:8:2",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_memory_ptr",
@@ -7065,16 +7065,16 @@
                     }
                   }
                 ],
-                "id": 302,
+                "id": 310,
                 "kind": "modifierInvocation",
                 "modifierName": {
-                  "id": 300,
+                  "id": 308,
                   "name": "fileExists",
                   "nameLocations": [
                     "788:10:2"
                   ],
                   "nodeType": "IdentifierPath",
-                  "referencedDeclaration": 296,
+                  "referencedDeclaration": 304,
                   "src": "788:10:2"
                 },
                 "nodeType": "ModifierInvocation",
@@ -7085,17 +7085,17 @@
             "nameLocation": "738:16:2",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 299,
+              "id": 307,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 298,
+                  "id": 306,
                   "mutability": "mutable",
                   "name": "filename",
                   "nameLocation": "769:8:2",
                   "nodeType": "VariableDeclaration",
-                  "scope": 317,
+                  "scope": 325,
                   "src": "755:22:2",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -7104,7 +7104,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 297,
+                    "id": 305,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "755:6:2",
@@ -7119,12 +7119,12 @@
               "src": "754:24:2"
             },
             "returnParameters": {
-              "id": 303,
+              "id": 311,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "809:0:2"
             },
-            "scope": 334,
+            "scope": 342,
             "src": "729:178:2",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -7132,7 +7132,7 @@
           },
           {
             "body": {
-              "id": 332,
+              "id": 340,
               "nodeType": "Block",
               "src": "1022:52:2",
               "statements": [
@@ -7140,24 +7140,24 @@
                   "expression": {
                     "expression": {
                       "baseExpression": {
-                        "id": 327,
+                        "id": 335,
                         "name": "audioFiles",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 262,
+                        "referencedDeclaration": 270,
                         "src": "1040:10:2",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_mapping$_t_string_memory_ptr_$_t_struct$_AudioFile_$257_storage_$",
+                          "typeIdentifier": "t_mapping$_t_string_memory_ptr_$_t_struct$_AudioFile_$265_storage_$",
                           "typeString": "mapping(string memory => struct VotingContract.AudioFile storage ref)"
                         }
                       },
-                      "id": 329,
+                      "id": 337,
                       "indexExpression": {
-                        "id": 328,
+                        "id": 336,
                         "name": "filename",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 319,
+                        "referencedDeclaration": 327,
                         "src": "1051:8:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_string_memory_ptr",
@@ -7171,11 +7171,11 @@
                       "nodeType": "IndexAccess",
                       "src": "1040:20:2",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_AudioFile_$257_storage",
+                        "typeIdentifier": "t_struct$_AudioFile_$265_storage",
                         "typeString": "struct VotingContract.AudioFile storage ref"
                       }
                     },
-                    "id": 330,
+                    "id": 338,
                     "isConstant": false,
                     "isLValue": true,
                     "isPure": false,
@@ -7183,33 +7183,33 @@
                     "memberLocation": "1061:5:2",
                     "memberName": "votes",
                     "nodeType": "MemberAccess",
-                    "referencedDeclaration": 254,
+                    "referencedDeclaration": 262,
                     "src": "1040:26:2",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
-                  "functionReturnParameters": 326,
-                  "id": 331,
+                  "functionReturnParameters": 334,
+                  "id": 339,
                   "nodeType": "Return",
                   "src": "1033:33:2"
                 }
               ]
             },
             "functionSelector": "14fb54ef",
-            "id": 333,
+            "id": 341,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
                 "arguments": [
                   {
-                    "id": 322,
+                    "id": 330,
                     "name": "filename",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 319,
+                    "referencedDeclaration": 327,
                     "src": "994:8:2",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_memory_ptr",
@@ -7217,16 +7217,16 @@
                     }
                   }
                 ],
-                "id": 323,
+                "id": 331,
                 "kind": "modifierInvocation",
                 "modifierName": {
-                  "id": 321,
+                  "id": 329,
                   "name": "fileExists",
                   "nameLocations": [
                     "983:10:2"
                   ],
                   "nodeType": "IdentifierPath",
-                  "referencedDeclaration": 296,
+                  "referencedDeclaration": 304,
                   "src": "983:10:2"
                 },
                 "nodeType": "ModifierInvocation",
@@ -7237,17 +7237,17 @@
             "nameLocation": "924:20:2",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 320,
+              "id": 328,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 319,
+                  "id": 327,
                   "mutability": "mutable",
                   "name": "filename",
                   "nameLocation": "959:8:2",
                   "nodeType": "VariableDeclaration",
-                  "scope": 333,
+                  "scope": 341,
                   "src": "945:22:2",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -7256,7 +7256,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 318,
+                    "id": 326,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "945:6:2",
@@ -7271,17 +7271,17 @@
               "src": "944:24:2"
             },
             "returnParameters": {
-              "id": 326,
+              "id": 334,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 325,
+                  "id": 333,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 333,
+                  "scope": 341,
                   "src": "1013:7:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -7290,7 +7290,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 324,
+                    "id": 332,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1013:7:2",
@@ -7304,14 +7304,14 @@
               ],
               "src": "1012:9:2"
             },
-            "scope": 334,
+            "scope": 342,
             "src": "915:159:2",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 335,
+        "scope": 343,
         "src": "93:986:2",
         "usedErrors": [],
         "usedEvents": []
@@ -7325,7 +7325,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.16",
-  "updatedAt": "2024-05-12T03:40:25.870Z",
+  "updatedAt": "2024-05-12T05:05:40.479Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},
