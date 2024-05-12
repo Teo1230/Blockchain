@@ -2,12 +2,15 @@ import json
 import requests
 import time
 import os
-import threading  # Adaugă această linie
+import threading
 from web3 import Web3
 from flask import Flask, render_template, request, jsonify
 from flask_wtf import FlaskForm
 from wtforms import FileField, SubmitField
 from wtforms.validators import DataRequired
+from flask import redirect, url_for
+from tinydb import TinyDB, Query
+from functools import partial
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret'
@@ -40,13 +43,42 @@ def value_based_gas_price_strategy(web3, transaction_params):
 w3.eth.set_gas_price_strategy(value_based_gas_price_strategy)
 
 class UploadForm(FlaskForm):
-    audio = FileField('Fișier audio', validators=[DataRequired()])
-    submit = SubmitField('Încarcă')
+    audio = FileField('Audio File', validators=[DataRequired()])
+    submit = SubmitField('Upload')
+
+# Update the votes for a specific file in the database
+def update_votes(filename):
+    Music = Query()
+    db.update({'votes': db.get(Music.filename == filename)['votes'] + 1}, Music.filename == filename)
+
+# Route for voting
+@app.route('/vote', methods=['POST'])
+def vote():
+    filename = request.form['filename']
+    update_votes(filename)
+    return redirect(url_for('index'))
+
+# Initialize TinyDB database
+db = TinyDB('music.json')
+
+# Save uploaded music to the database
+def save_uploaded_music(filename, uploader_address):
+    db.insert({'filename': filename, 'uploader_address': uploader_address, 'votes': 0})
+
+# Get uploaded music from the database
+def get_uploaded_music():
+    if os.path.exists('music.json') and os.path.getsize('music.json') > 0:
+        with open('music.json') as f:
+            data = json.load(f)
+        return list(data["_default"].values())
+    else:
+        return []
 
 # Sepolia ABI
 try:
-    with open(os.path.join('build', 'SepoliaContract.abi')) as f:
-        SEPOLIA_ABI = json.load(f)
+    with open(os.path.join('build', 'contracts', 'MusicContract.json')) as f:
+        contract_json = json.load(f)
+        SEPOLIA_ABI = contract_json['abi']
 except Exception as e:
     print(e)
 
@@ -73,7 +105,7 @@ class TransactionManager:
             'maxFeePerGas': transaction_cost,
             'maxPriorityFeePerGas': Web3.to_wei('1', 'gwei'),
             'value': Web3.to_wei('0', 'ether'),  # Transaction value
-            'gas': 2000000,  # Adjusted the gas parameter
+            'gas': 30000000,  # Adjusted the gas parameter
             'chainId': 11155111  # Add the chainId parameter
         }
 
@@ -104,7 +136,7 @@ class TransactionManager:
         contract = w3.eth.contract(address=sepolia_address, abi=SEPOLIA_ABI)
         tx = contract.functions.uploadFile(filename).build_transaction({
             'chainId': 11155111,
-            'gas': 2000000,
+            'gas': 30000000,
             'gasPrice': w3.eth.generate_gas_price({'value': os.path.getsize(os.path.join('uploads', filename))}),
             'nonce': nonce,
         })
@@ -113,15 +145,61 @@ class TransactionManager:
         transaction_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
         return transaction_hash
 
-    def listen_to_events(self):
+    def delete_transaction(self, filename):
+        nonce = w3.eth.get_transaction_count(self.wallet_address)
+
         contract = w3.eth.contract(address=sepolia_address, abi=SEPOLIA_ABI)
-        event_filter = contract.events.FileUploaded.create_filter(fromBlock="latest")
-        print(event_filter)
-        print("Listening")
-        for event in event_filter.get_new_entries():
-            print("DA")
-            print(f"New event: {event['args']}")
-            # Aici poți adăuga logica suplimentară pentru a trata evenimentele
+        tx = contract.functions.deleteFile(filename).build_transaction({
+            'chainId': 11155111,
+            'gas': 30000000,
+            'nonce': nonce,
+        })
+
+        signed_tx = w3.eth.account.sign_transaction(tx, self.private_key)
+        transaction_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+        return transaction_hash
+
+    def listen_to_events(self):
+        try:
+            # Sepolia ABI
+            with open(os.path.join('build', 'contracts', 'MusicContract.json')) as f:
+                music_contract_json = json.load(f)
+                MUSIC_ABI = music_contract_json['abi']
+                MUSIC_ADDRESS = music_contract_json['networks']['11155111']['address']  # Update here
+
+            # VotingContract ABI și adresă
+            with open(os.path.join('build', 'contracts', 'VotingContract.json')) as f:
+                voting_contract_json = json.load(f)
+                VOTING_ABI = voting_contract_json['abi']
+                VOTING_ADDRESS = voting_contract_json['networks']['11155111']['address']  # Update here
+
+            # Creare contracte web3 pentru fiecare contract
+            music_contract = w3.eth.contract(address=MUSIC_ADDRESS, abi=MUSIC_ABI)
+            voting_contract = w3.eth.contract(address=VOTING_ADDRESS, abi=VOTING_ABI)
+
+            # Filtru de evenimente pentru MusicContract
+            music_event_filter = music_contract.events.FileUploaded.createFilter(fromBlock="latest")
+            print("Listening for events from MusicContract...")
+
+            # Filtru de evenimente pentru VotingContract
+            voting_event_filter = voting_contract.events.VoteCasted.createFilter(fromBlock="latest")
+            print("Listening for events from VotingContract...")
+
+            # Ascultare evenimente pentru MusicContract
+            for event in music_event_filter.get_new_entries():
+                print("New event from MusicContract:")
+                print(f"File uploaded: {event['args']['filename']} by {event['args']['uploader']}")
+                print(f"Amount: {event['args']['amount']} ETH")
+
+            # Ascultare evenimente pentru VotingContract
+            for event in voting_event_filter.get_new_entries():
+                print("New event from VotingContract:")
+                print(f"Vote casted by: {event['args']['voter']}")
+                print(f"For file: {event['args']['filename']}")
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
+
 
 transaction_manager = TransactionManager(wallet_address, private_key)
 
@@ -143,12 +221,13 @@ def index():
     except requests.RequestException as e:
         return f"An error occurred: {e}"
 
-    uploaded_files = os.listdir('uploads')
+    # În loc să citești fișierele din folderul 'uploads', obține informațiile din baza de date
+    uploaded_files = get_uploaded_music()
     costs = {}
-    for file in uploaded_files:
-        file_size = os.path.getsize(os.path.join('uploads', file))
+    for file_info in uploaded_files:
+        file_size = os.path.getsize(os.path.join('uploads', file_info['filename']))
         transaction_cost = w3.eth.generate_gas_price({'value': file_size})
-        costs[file] = w3.from_wei(transaction_cost, 'ether')
+        costs[file_info['filename']] = w3.from_wei(transaction_cost, 'ether')
 
     total_cost = sum(costs.values())
 
@@ -173,6 +252,7 @@ def upload_music():
         audio = form.audio.data
         filename = audio.filename
         audio.save(os.path.join('uploads', filename))
+        save_uploaded_music(filename, wallet_address)
         transaction_hash=transaction_manager.upload_transaction(filename)
         transaction_cost = w3.eth.generate_gas_price({
             'to': recipient_address,
@@ -181,6 +261,23 @@ def upload_music():
         return render_template('upload_complete.html', form=form, transaction_cost=transaction_cost,transaction_hash=transaction_hash)
 
     return render_template('upload.html', form=form)
+
+from hexbytes import HexBytes
+
+@app.route('/delete/<filename>', methods=['POST'])
+def delete_music(filename):
+    # Verificăm dacă fișierul există în baza de date și dacă utilizatorul este proprietarul fișierului
+    file_info = db.get(Query().filename == filename)
+    if file_info and file_info['uploader_address'] == wallet_address:
+        # Apelăm funcția de ștergere a fișierului din contractul MusicContract
+        transaction_hash = transaction_manager.delete_transaction(filename)
+        # Ștergem fișierul din baza de date
+        db.remove(Query().filename == filename)
+        # Convert the HexBytes object to a string
+        transaction_hash_str = HexBytes(transaction_hash).hex()
+        return jsonify({"success": True, "transaction_hash": transaction_hash_str})  # Convert to string before returning
+    else:
+        return jsonify({"success": False, "message": "File not found or you are not the owner"}), 404
 
 @app.route('/calculate_cost', methods=['POST'])
 def calculate_cost():
@@ -196,7 +293,9 @@ if __name__ == '__main__':
         os.makedirs('downloads')
 
     # Ascultă evenimentele Sepolia într-un thread separat
-    event_thread = threading.Thread(target=transaction_manager.listen_to_events)
+    
+    event_thread = threading.Thread(target=partial(transaction_manager.listen_to_events))
+
     event_thread.start()
 
     app.run(debug=True)

@@ -47,10 +47,10 @@
 </head>
 <body>
     <h1>Dashboard</h1>
-    <p><strong>Adresa portofelului:</strong> {{ wallet_address }}</p>
-    <p><strong>Soldul portofelului:</strong> {{ balance }} ETH</p>
+    <p><strong>Wallet Address:</strong> {{ wallet_address }}</p>
+    <p><strong>Wallet Sold:</strong> {{ balance }} ETH</p>
 
-    <h2>Încărcare muzică</h2>
+    <h2>Upload Music</h2>
     <form action="/upload" method="post" enctype="multipart/form-data" id="uploadForm">
         {{ form.hidden_tag() }}
         <p>
@@ -63,47 +63,55 @@
         </p>
     </form>
 
-    <h2>Muzică încărcată</h2>
+    <h2>Uploaded Music</h2>
     <ul>
-        {% for file in uploaded_files %}
-            <li><a href="{{ url_for('download_music', filename=file) }}">{{ file }} - Price: {{ costs.get(file, 'N/A') }} ETH</a></li>
+        {% for file_info in uploaded_files %}
+            <li data-filename="{{ file_info['filename'] }}">
+                <a href="{{ url_for('download_music', filename=file_info['filename']) }}">
+                    {{ file_info['filename'].split('.')[0] }} - Price: {{ costs.get(file_info['filename'], 'N/A') }} ETH - Votes: {{ file_info.get('votes', 0) }}
+                </a>
+                <form class="vote-form" action="/vote" method="post">
+                    <input type="hidden" name="filename" value="{{ file_info['filename'] }}">
+                    <button type="submit">Vote</button>
+                </form>
+                <form class="delete-form" action="/delete/{{ file_info['filename'] }}" method="post">
+                    <input type="hidden" name="filename" value="{{ file_info['filename'] }}">
+                    <button type="submit">Delete</button>
+                </form>
+            </li>
         {% endfor %}
     </ul>
-    <p><strong>Cost total: </strong>{{ total_cost }} ETH</p>
 
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const audioInput = document.querySelector('input[type="file"]');
-        const costSpan = document.getElementById('costSpan');
+        document.addEventListener('DOMContentLoaded', () => {
+            const deleteForms = document.querySelectorAll('.delete-form');
 
-        audioInput.addEventListener('change', async (event) => {
-            const file = event.target.files[0];
+            deleteForms.forEach(form => {
+                form.addEventListener('submit', async (event) => {
+                    event.preventDefault();
+                    const formData = new FormData(form);
+                    const filename = formData.get('filename');
 
-            // Verifică extensia fișierului
-            if (!file.name.endsWith('.mp3')) {
-                alert('Vă rugăm să încărcați doar fișiere .mp3.');
-                audioInput.value = ''; // Golește valoarea inputului pentru a permite selectarea unui alt fișier
-                costSpan.innerText = '';
-                return;
-            }
+                    try {
+                        const response = await fetch(`/delete/${filename}`, {
+                            method: 'POST'
+                        });
 
-            const formData = new FormData();
-            formData.append('audio', file);
-
-            try {
-                const response = await fetch('/calculate_cost', {
-                    method: 'POST',
-                    body: formData
+                        const data = await response.json();
+                        if (data.success) {
+                            const deletedSong = document.querySelector(`[data-filename="${filename}"]`);
+                            if (deletedSong) {
+                                deletedSong.remove();
+                            }
+                        } else {
+                            console.error('Failed to delete song:', data.message);
+                        }
+                    } catch (error) {
+                        console.error('Error deleting song:', error);
+                    }
                 });
-
-                const data = await response.json();
-                costSpan.innerText = ` - Price: ${data.transaction_cost} ETH`;
-            } catch (error) {
-                console.error('Error calculating cost:', error);
-            }
+            });
         });
-    });
-</script>
-
+    </script>
 </body>
 </html>
