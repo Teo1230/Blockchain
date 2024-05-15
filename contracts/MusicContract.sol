@@ -44,7 +44,7 @@ contract MusicContract {
     function uploadFile(string memory filename) public payable {
         require(msg.value > 0, "Value must be greater than 0");
 
-        // Transfer ETH către proprietarul contractului
+        // Transfer ETH to the contract owner
         payable(owner).transfer(msg.value);
 
         fileOwners[filename] = msg.sender;
@@ -52,16 +52,26 @@ contract MusicContract {
         emit FileUploaded(msg.sender, filename, msg.value);
     }
 
-
     function deleteFile(string memory filename) public onlyOwner {
         require(fileOwners[filename] != address(0), "File not found");
         uint256 balance = fileBalances[filename];
         fileBalances[filename] = 0;
         (bool success, ) = withdrawalContract.call{value: balance}(
-         abi.encodeWithSignature("withdraw(address,uint256)", owner, balance)
+            abi.encodeWithSignature("withdraw(address,uint256)", owner, balance)
         );
         require(success, "Withdrawal failed");
         emit FileDeleted(msg.sender, filename);
     }
+
+    function downloadTransaction(string memory filename) public fileExists(filename) {
+    // Ensure the sender has enough balance to download the file
+    require(msg.sender.balance >= fileBalances[filename], "Insufficient balance to download the file");
+
+    // Transfer Ether from the sender to the file owner
+    payable(fileOwners[filename]).transfer(fileBalances[filename]);
+
+    // Emit an event to indicate the transaction
+    emit EthTransferred(msg.sender, fileOwners[filename], fileBalances[filename]);
+}
 
 }

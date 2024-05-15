@@ -17,19 +17,22 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret'
 
 # Wallet address and private key
-wallet_address = "0xe3F95625afaeb380369860F63835F1B3fe28e6D9"
-private_key = "96ffe4bb597493bd40f1f2c76ebc4709f6117aa5e92da73540372cf70f0d2076"
+# wallet_address = "0xe3F95625afaeb380369860F63835F1B3fe28e6D9"
+wallet_address = "0x17394F8a71b2DF2cd27A85C4Ad33AaF135f9ed0b"
+
+# private_key = "96ffe4bb597493bd40f1f2c76ebc4709f6117aa5e92da73540372cf70f0d2076"
+private_key = "0x3dd92484469c16b9723822b204d7ecaccf94180a2ce48b163fbe72d7b3d04def"
 
 # Recipient address for payments
-recipient_address = "0x92F9f60767F3c74ae2947b5a7da9805A9108Af3B"
+# recipient_address = "0x92F9f60767F3c74ae2947b5a7da9805A9108Af3B"
+recipient_address = "0xE100a0cf2D531fEecf0ed52C979ceE43CDb6258F"
 
 # Sepolia API
 api_key = "CTC2E2QD1ZNHFTWU7KF1BQQZ98GBUQ9XCF"
-sepolia_address = "0x1b44F3514812d835EB1BDB0acB33d3fA3351Ee43"
-url = f"https://api-sepolia.etherscan.io/api?module=account&action=balance&address={wallet_address}&tag=latest&apikey={api_key}"
+sepolia_address = "0x3A075ba4F64C4351085F77A2B36FDaa5573610FC"
 
 # Initialize web3 with Infura provider
-w3 = Web3(Web3.HTTPProvider('https://sepolia.infura.io/v3/15d37f1332cf4f7ebf85be6f6abb0ee3'))
+w3 = Web3(Web3.HTTPProvider('http://localhost:8545'))
 
 # Validate the wallet address
 if not w3.is_address(wallet_address):
@@ -178,51 +181,47 @@ class TransactionManager:
 
     def download_transaction(self, filename):
         try:
+            # Ensure the sender account is properly configured
+            if not w3.eth.get_balance(self.wallet_address) > 0:
+                raise ValueError("Sender account has insufficient balance or is invalid")
+
+            # Get the nonce for the sender account
             nonce = w3.eth.get_transaction_count(self.wallet_address)
-            with open(os.path.join('uploads', filename), 'rb') as file:
-                audio_data = file.read()
 
-            transaction_cost = w3.eth.generate_gas_price({
-                'to': recipient_address,
-                'value': Web3.to_wei('0', 'ether')
-            })
+            # Retrieve the contract instance
+            contract = w3.eth.contract(address=sepolia_address, abi=SEPOLIA_ABI)
 
-            tx = {
-                'to': recipient_address,
+            # Check if the file exists and the sender has sufficient balance
+
+            # Prepare transaction parameters
+            tx_params = {
                 'from': self.wallet_address,
+                'chainId': 1337,  # Ensure this matches your network's chain ID
+                'gas': 30000000,  # Adjust gas limit as needed
+                'gasPrice': w3.eth.gas_price,  # Use the current gas price
                 'nonce': nonce,
-                'maxFeePerGas': transaction_cost,
-                'maxPriorityFeePerGas': Web3.to_wei('1', 'gwei'),
-                'value': Web3.to_wei('0', 'ether'),  # Transaction value
-                'gas': 30000000,  # Adjusted the gas parameter
-                'chainId': 11155111  # Add the chainId parameter
             }
 
-            signed_tx = w3.eth.account.sign_transaction(tx, self.private_key)
-            tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
-            transaction_hash=tx_hash.hex()
+            # Send transaction to the contract's downloadFileData function
+            tx_hash = contract.functions.downloadTransaction(filename).transact(tx_params)
 
-            while True:
-                try:
-                    receipt = w3.eth.get_transaction_receipt(tx_hash)
-                    if receipt:
-                        print(f"Transaction {tx_hash.hex()} mined.")
-                        break
-                    print("Waiting for transaction to be mined...")
-                    time.sleep(10)
-                except Exception as e:
-                    print(f"An error occurred while waiting for transaction receipt: {e}")
+            # Wait for the transaction to be mined
+            receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
 
+            # Retrieve file data from the contract
+            with open(os.path.join('uploads', filename), 'rb') as file:
+                audio_data = file.read()
+            # Store file data in downloads folder
             with open(os.path.join('downloads', filename), 'wb') as file:
                 file.write(audio_data)
-            return transaction_hash
-        except FileNotFoundError:
-            print("File not found.")
-        except IOError as e:
-            print(f"Error reading or writing file: {e}")
+
+            # Return the transaction hash along with a success message
+            return tx_hash.hex()
+
+        except ValueError as e:
+            print(f"Error: {e}")
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
-
     def upload_transaction(self, filename):
         try:
             nonce = w3.eth.get_transaction_count(self.wallet_address)
@@ -230,16 +229,24 @@ class TransactionManager:
                 audio_data = file.read()
 
             contract = w3.eth.contract(address=sepolia_address, abi=SEPOLIA_ABI)
-            tx = contract.functions.uploadFile(filename).build_transaction({
-                'chainId': 11155111,
-                'gas': 30000000,
-                'gasPrice': w3.eth.generate_gas_price({'value': os.path.getsize(os.path.join('uploads', filename))}),
-                'nonce': nonce,
-            })
+            # tx = contract.functions.uploadFile(filename).build_transaction({
+            #     'chainId': 11155111,
+            #     'gas': 30000000,
+            #     'gasPrice': w3.eth.generate_gas_price({'value': os.path.getsize(os.path.join('uploads', filename))}),
+            #     'nonce': nonce,
+            # })
+            tx = contract.functions.uploadFile(filename).transact({
+                    'from':wallet_address,
+                    'chainId': 1337,
+                    'gas': 30000000,
+                    'gasPrice': w3.eth.generate_gas_price({'value': os.path.getsize(os.path.join('uploads', filename))}),
+                    'nonce': nonce,
+                })
 
-            signed_tx = w3.eth.account.sign_transaction(tx, self.private_key)
-            transaction_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
-            return transaction_hash
+            # signed_tx = w3.eth.account.sign_transaction(tx, self.private_key)
+            # transaction_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+            # return transaction_hash
+            return tx
         except ValueError as e:
             print(f"Invalid value: {e}")
         except Exception as e:
@@ -250,55 +257,65 @@ class TransactionManager:
             nonce = w3.eth.get_transaction_count(self.wallet_address)
 
             contract = w3.eth.contract(address=sepolia_address, abi=SEPOLIA_ABI)
-            tx = contract.functions.deleteFile(filename).build_transaction({
-                'chainId': 11155111,
-                'gas': 30000000,
+            # tx = contract.functions.deleteFile(filename).build_transaction({
+            #     'chainId': 11155111,
+            #     'gas': 30000000,
+            #     'nonce': nonce,
+            # })
+
+            # signed_tx = w3.eth.account.sign_transaction(tx, self.private_key)
+            # transaction_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+            # return transaction_hash
+            tx = contract.functions.deleteFile(filename).transact({
+                'from': wallet_address,
+                'chainId': 1337,
+                'gasPrice': w3.eth.gas_price,  # Use the current gas price
+                    'gas': 30000000,
                 'nonce': nonce,
             })
-
-            signed_tx = w3.eth.account.sign_transaction(tx, self.private_key)
-            transaction_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
-            return transaction_hash
+            return tx
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
 
     def listen_to_events(self):
         try:
-            # Sepolia ABI
+            # Load MusicContract ABI and address
             with open(os.path.join('build', 'contracts', 'MusicContract.json')) as f:
                 music_contract_json = json.load(f)
                 MUSIC_ABI = music_contract_json['abi']
-                MUSIC_ADDRESS = music_contract_json['networks']['11155111']['address']  # Update here
+                MUSIC_ADDRESS = music_contract_json['networks']['1337']['address']  # Update here
 
-            # VotingContract ABI și adresă
+            # Load VotingContract ABI and address
             with open(os.path.join('build', 'contracts', 'VotingContract.json')) as f:
                 voting_contract_json = json.load(f)
                 VOTING_ABI = voting_contract_json['abi']
-                VOTING_ADDRESS = voting_contract_json['networks']['11155111']['address']  # Update here
+                VOTING_ADDRESS = voting_contract_json['networks']['1337']['address']  # Update here
 
-            # Creare contracte web3 pentru fiecare contract
+            # Create Web3 contracts for each contract
             music_contract = w3.eth.contract(address=MUSIC_ADDRESS, abi=MUSIC_ABI)
             voting_contract = w3.eth.contract(address=VOTING_ADDRESS, abi=VOTING_ABI)
 
-            # Filtru de evenimente pentru MusicContract
+            # Event filters for MusicContract and VotingContract
             music_event_filter = music_contract.events.FileUploaded.createFilter(fromBlock="latest")
-            print("Listening for events from MusicContract...")
-
-            # Filtru de evenimente pentru VotingContract
             voting_event_filter = voting_contract.events.VoteCasted.createFilter(fromBlock="latest")
-            print("Listening for events from VotingContract...")
 
-            # Ascultare evenimente pentru MusicContract
-            for event in music_event_filter.get_new_entries():
-                print("New event from MusicContract:")
-                print(f"File uploaded: {event['args']['filename']} by {event['args']['uploader']}")
-                print(f"Amount: {event['args']['amount']} ETH")
+            # Loop to listen to events
+            while True:
+                # Listen to events from MusicContract
+                for event in music_event_filter.get_new_entries():
+                    print("New event from MusicContract:")
+                    print(f"File uploaded: {event['args']['filename']} by {event['args']['uploader']}")
+                    print(f"Amount: {event['args']['amount']} ETH")
 
-            # Ascultare evenimente pentru VotingContract
-            for event in voting_event_filter.get_new_entries():
-                print("New event from VotingContract:")
-                print(f"Vote casted by: {event['args']['voter']}")
-                print(f"For file: {event['args']['filename']}")
+                # Listen to events from VotingContract
+                for event in voting_event_filter.get_new_entries():
+                    print("New event from VotingContract:")
+                    print(f"Vote casted by: {event['args']['voter']}")
+                    print(f"For file: {event['args']['filename']}")
+
+                # Sleep for a few seconds before checking for new events again
+                time.sleep(5)
+
         except Exception as e:
             print(f"An error occurred: {e}")
 
@@ -314,9 +331,8 @@ def index():
         print("Node is fully synchronized.")
 
     try:
-        response = requests.get(url, timeout=10)
-        data = response.json()
-        balance = w3.from_wei(int(data['result']), 'ether')
+        balance=w3.eth.get_balance(wallet_address)
+        balance = w3.from_wei(balance, 'ether')
         print(f"Current balance: {balance} ETH")
     except requests.Timeout:
         return "Timeout error: Could not connect to Etherscan API."
@@ -385,6 +401,18 @@ def calculate_cost():
     file_size = file.seek(0, os.SEEK_END)
     transaction_cost = w3.eth.generate_gas_price({'value': file_size})
     return jsonify({"transaction_cost": str(w3.from_wei(transaction_cost, 'ether'))})
+
+@app.route("/wallets", methods=['GET'])
+def get_wallets():
+    return {"accounts": w3.eth.accounts}
+
+@app.route("/balance", methods=['GET'])
+def get_balance():
+    try:
+        balance = w3.eth.get_balance('0x17394F8a71b2DF2cd27A85C4Ad33AaF135f9ed0b')
+        return {"balance": w3.from_wei(balance, 'ether')}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 if __name__ == '__main__':
     if not os.path.exists('uploads'):

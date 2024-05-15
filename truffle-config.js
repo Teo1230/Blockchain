@@ -64,11 +64,11 @@ module.exports = {
     // tab if you use this network and you must also set the `host`, `port` and `network_id`
     // options below to some value.
     //
-    // development: {
-    //  host: "127.0.0.1",     // Localhost (default: none)
-    //  port: 8545,            // Standard Ethereum port (default: none)
-    //  network_id: "*",       // Any network (default: none)
-    // },
+    development: {
+     host: "127.0.0.1",     // Localhost (default: none)
+     port: 8545,            // Standard Ethereum port (default: none)
+     network_id: "*",       // Any network (default: none)
+    },
     //
     // An additional network, but with some advanced options…
     // advanced: {
@@ -82,18 +82,18 @@ module.exports = {
     //
     // Useful for deploying to a public network.
     // Note: It's important to wrap the provider as a function to ensure truffle uses a new provider every time.
-    sepolia: {
-      provider: () => new HDWalletProvider({
-        privateKeys: ["96ffe4bb597493bd40f1f2c76ebc4709f6117aa5e92da73540372cf70f0d2076"], // înlocuiți cu cheia privată a portofelului dorit
-        providerOrUrl: `https://sepolia.infura.io/v3/15d37f1332cf4f7ebf85be6f6abb0ee3`,
-      }),
-      network_id: 11155111,       // Goerli's id
-      confirmations: 2,    // # of confirmations to wait between deployments. (default: 0)
-      timeoutBlocks: 200,  // # of blocks before a deployment times out  (minimum/default: 50)
-      skipDryRun: true,     // Skip dry run before migrations? (default: false for public nets )
-      gas: 30000000
-      //gasPrice: 100,
-    },
+    // sepolia: {
+    //   provider: () => new HDWalletProvider({
+    //     privateKeys: ["96ffe4bb597493bd40f1f2c76ebc4709f6117aa5e92da73540372cf70f0d2076"], // înlocuiți cu cheia privată a portofelului dorit
+    //     providerOrUrl: `https://sepolia.infura.io/v3/15d37f1332cf4f7ebf85be6f6abb0ee3`,
+    //   }),
+    //   network_id: 11155111,       // Goerli's id
+    //   confirmations: 2,    // # of confirmations to wait between deployments. (default: 0)
+    //   timeoutBlocks: 200,  // # of blocks before a deployment times out  (minimum/default: 50)
+    //   skipDryRun: true,     // Skip dry run before migrations? (default: false for public nets )
+    //   gas: 30000000
+    //   //gasPrice: 100,
+    // },
     //
     // Useful for private networks
     // private: {

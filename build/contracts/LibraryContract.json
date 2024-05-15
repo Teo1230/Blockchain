@@ -17,7 +17,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -36,7 +37,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     }
   ],
   "metadata": "{\"compiler\":{\"version\":\"0.8.21+commit.d9974bed\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_sender\",\"type\":\"address\"}],\"name\":\"isOwner\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/LibraryContract.sol\":\"LibraryContract\"},\"evmVersion\":\"shanghai\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/LibraryContract.sol\":{\"keccak256\":\"0xb6a165decb851f7c389e7d79e2632de25a118d96289fd7b172f459bfd87a91c1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://98f3485c2e9ce0b3fa0c9209cb84c6f105f0a6af647c811e2b72c1e87989f05c\",\"dweb:/ipfs/QmZHX5oZFji7Nst1xRib85tGrtQRumgTZgoQ6wsioEzHN1\"]}},\"version\":1}",
@@ -1236,7 +1238,7 @@
   "sourceMap": "60:226:0:-:0;;;121:51;;;;;;;;;;154:10;146:5;;:18;;;;;;;;;;;;;;;;;;60:226;;;;;;",
   "deployedSourceMap": "60:226:0:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;180:103;;;;;;;;;;;;;:::i;:::-;;:::i;:::-;;;;;;;:::i;:::-;;;;;;;;92:20;;;:::i;:::-;;;;;;;:::i;:::-;;;;;;;;180:103;235:4;268:7;259:16;;:5;;;;;;;;;;:16;;;252:23;;180:103;;;:::o;92:20::-;;;;;;;;;;;;:::o;88:117:4:-;197:1;194;187:12;334:126;371:7;411:42;404:5;400:54;389:65;;334:126;;;:::o;466:96::-;503:7;532:24;550:5;532:24;:::i;:::-;521:35;;466:96;;;:::o;568:122::-;641:24;659:5;641:24;:::i;:::-;634:5;631:35;621:63;;680:1;677;670:12;621:63;568:122;:::o;696:139::-;742:5;780:6;767:20;758:29;;796:33;823:5;796:33;:::i;:::-;696:139;;;;:::o;841:329::-;900:6;949:2;937:9;928:7;924:23;920:32;917:119;;;955:79;;:::i;:::-;917:119;1075:1;1100:53;1145:7;1136:6;1125:9;1121:22;1100:53;:::i;:::-;1090:63;;1046:117;841:329;;;;:::o;1176:90::-;1210:7;1253:5;1246:13;1239:21;1228:32;;1176:90;;;:::o;1272:109::-;1353:21;1368:5;1353:21;:::i;:::-;1348:3;1341:34;1272:109;;:::o;1387:210::-;1474:4;1512:2;1501:9;1497:18;1489:26;;1525:65;1587:1;1576:9;1572:17;1563:6;1525:65;:::i;:::-;1387:210;;;;:::o;1603:118::-;1690:24;1708:5;1690:24;:::i;:::-;1685:3;1678:37;1603:118;;:::o;1727:222::-;1820:4;1858:2;1847:9;1843:18;1835:26;;1871:71;1939:1;1928:9;1924:17;1915:6;1871:71;:::i;:::-;1727:222;;;;:::o",
   "source": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.0;\r\n\r\ncontract LibraryContract {\r\n    address public owner;\r\n\r\n    constructor() {\r\n        owner = msg.sender;\r\n    }\r\n\r\n    function isOwner(address _sender) public view returns (bool) {\r\n        return owner == _sender;\r\n    }\r\n}\r\n",
-  "sourcePath": "C:\\Users\\Ionut\\Desktop\\Blockchain\\contracts\\LibraryContract.sol",
+  "sourcePath": "C:\\Users\\teomi\\Desktop\\Blockchain\\contracts\\LibraryContract.sol",
   "ast": {
     "absolutePath": "project:/contracts/LibraryContract.sol",
     "exportedSymbols": {
@@ -1546,9 +1548,29 @@
     "name": "solc",
     "version": "0.8.21+commit.d9974bed.Emscripten.clang"
   },
-  "networks": {},
+  "networks": {
+    "1715807899972": {
+      "events": {},
+      "links": {},
+      "address": "0x98df39A2a575191De91705a4C0545E5bc1678F91",
+      "transactionHash": "0x007d3cd7af2b93fce230dbf0f6718aada9188b5af92429c3b9cc5c1a84076466"
+    },
+    "1715812579225": {
+      "events": {},
+      "links": {},
+      "address": "0xEec43824E62A159030f9Fbc5Df8962B9CB6E5a57",
+      "transactionHash": "0x3bf92f3c86d381ace8aa262da61f21807c826ea3ea34d83aa742b6ff26fcbe69"
+    },
+    "1715813540480": {
+      "events": {},
+      "links": {},
+      "address": "0x62fCbC9e1e2AdbD05F994DC7136971514DA1E6CF",
+      "transactionHash": "0xc89da84416e28bf82ed6d95fb435e9229fa7c91b2ea56520720cb6d8c30491d6"
+    }
+  },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2024-05-12T05:05:40.441Z",
+  "updatedAt": "2024-05-15T22:58:07.056Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {},
