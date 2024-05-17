@@ -12,29 +12,23 @@ from flask import redirect, url_for
 from tinydb import TinyDB, Query
 from functools import partial
 from hexbytes import HexBytes
+import ipfshttpclient
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret'
 
-# Wallet address and private key
-# wallet_address = "0xe3F95625afaeb380369860F63835F1B3fe28e6D9"
+
 wallet_address = "0x17394F8a71b2DF2cd27A85C4Ad33AaF135f9ed0b"
 
-# private_key = "96ffe4bb597493bd40f1f2c76ebc4709f6117aa5e92da73540372cf70f0d2076"
 private_key = "0x3dd92484469c16b9723822b204d7ecaccf94180a2ce48b163fbe72d7b3d04def"
 
-# Recipient address for payments
-# recipient_address = "0x92F9f60767F3c74ae2947b5a7da9805A9108Af3B"
 recipient_address = "0xE100a0cf2D531fEecf0ed52C979ceE43CDb6258F"
 
-# Sepolia API
 api_key = "CTC2E2QD1ZNHFTWU7KF1BQQZ98GBUQ9XCF"
-sepolia_address = "0x3A075ba4F64C4351085F77A2B36FDaa5573610FC"
+sepolia_address = "0xF63b963c6753fA72f0eA5BeB0dbd4DAF8e626A6e"
 
-# Initialize web3 with Infura provider
 w3 = Web3(Web3.HTTPProvider('http://localhost:8545'))
 
-# Validate the wallet address
 if not w3.is_address(wallet_address):
     raise ValueError(f"Invalid wallet address: {wallet_address}")
 
@@ -48,33 +42,27 @@ w3.eth.set_gas_price_strategy(value_based_gas_price_strategy)
 
 def value_based_gas_price_strategy(web3, transaction_params):
     try:
-        # Obțineți prețurile gazului de la ETH Gas Station
         response = requests.get("https://ethgasstation.info/api/ethgasAPI.json")
         gas_prices = response.json()
         
-        # Afișați prețurile gazului
         print("Gas Prices from ETH Gas Station:")
         print(f"Fast: {gas_prices['fast']} Gwei")
         print(f"Standard: {gas_prices['standard']} Gwei")
         print(f"SafeLow: {gas_prices['safeLow']} Gwei")
         
-        # Alegeți prețul gazului în funcție de valoarea tranzacției
         if transaction_params and transaction_params.get('value', 0) > Web3.to_wei(1, 'ether'):
             gas_price = gas_prices['fast']
         else:
             gas_price = gas_prices['standard']
         
-        # Convertiți prețul gazului din Gwei în Wei
         gas_price_wei = Web3.toWei(gas_price, 'gwei')
         
         return gas_price_wei
     except Exception as e:
         print(f"An error occurred while fetching gas prices: {e}")
-        # În caz de eroare, folosim un preț gaz implicit
         return Web3.toWei(5, 'gwei')
 
 
-# Funcție pentru estimarea costului gazului pentru o tranzacție
 def estimate_gas_cost(transaction):
     try:
         gas_estimate = w3.eth.estimate_gas(transaction)
@@ -83,22 +71,17 @@ def estimate_gas_cost(transaction):
         print(f"An error occurred while estimating gas cost: {e}")
         return None
 
-# Funcție pentru fixarea limită de cost a gazului pentru o tranzacție
 def set_gas_limit(gas_estimate):
     if gas_estimate:
-        # Setăm limita de cost a gazului la o valoare mai mare decât estimarea
-        gas_limit = int(gas_estimate * 1.5)  # Puteti ajusta factorul dupa preferinta
+        gas_limit = int(gas_estimate * 1.5)
         return gas_limit
     else:
         return None
 
-# Funcție pentru gestionarea erorilor de limită a gazului
 def handle_gas_limit_error(e, transaction):
-    # Aici puteti implementa o logica specifica pentru gestionarea erorilor de gaz
     print(f"An error occurred while setting gas limit: {e}")
     print(f"Transaction: {transaction}")
 
-# Funcție pentru efectuarea tranzacției cu limita de cost a gazului fixată
 def send_transaction_with_gas_limit(transaction, gas_limit):
     try:
         transaction['gas'] = gas_limit
@@ -109,7 +92,6 @@ def send_transaction_with_gas_limit(transaction, gas_limit):
         print(f"An error occurred while sending transaction with gas limit: {e}")
         return None
 
-# Exemplu de utilizare
 transaction = {
     'to': recipient_address,
     'from': wallet_address,
@@ -117,14 +99,11 @@ transaction = {
     'nonce': w3.eth.get_transaction_count(wallet_address),
 }
 
-# Estimam costul gazului pentru tranzactie
 gas_estimate = estimate_gas_cost(transaction)
 
-# Setam limita de cost a gazului
 gas_limit = set_gas_limit(gas_estimate)
 
 if gas_limit:
-    # Trimitem tranzactia cu limita de cost a gazului fixata
     tx_hash = send_transaction_with_gas_limit(transaction, gas_limit)
     if tx_hash:
         print(f"Transaction sent successfully. Hash: {HexBytes(tx_hash).hex()}")
@@ -132,31 +111,54 @@ if gas_limit:
         print("Failed to send transaction.")
 else:
     print("Failed to set gas limit.")
+client = ipfshttpclient.connect('/ip4/127.0.0.1/tcp/5001')
+
+db = TinyDB('music.json')
+
+def store_vote_on_ipfs(vote_data):
+    try:
+        vote_json = json.dumps(vote_data)
+        res = client.add_bytes(vote_json.encode())
+        return res['Hash']
+    except Exception as e:
+        print(f"Error storing vote on IPFS: {e}")
+        return None
+
+def get_vote_from_ipfs(ipfs_hash):
+    try:
+        data = client.cat(ipfs_hash)
+        vote_data = json.loads(data.decode())
+        return vote_data
+    except Exception as e:
+        print(f"Error retrieving vote from IPFS: {e}")
+        return None
+
+def update_votes(filename, vote_data):
+    Music = Query()
+    db.update({'votes': db.get(Music.filename == filename)['votes'] + 1}, Music.filename == filename)
+    ipfs_hash = store_vote_on_ipfs(vote_data)
+    if ipfs_hash:
+        db.update({'ipfs_hash': ipfs_hash}, Music.filename == filename)
 
 class UploadForm(FlaskForm):
     audio = FileField('Audio File', validators=[DataRequired()])
     submit = SubmitField('Upload')
 
-# Update the votes for a specific file in the database
-def update_votes(filename):
-    Music = Query()
-    db.update({'votes': db.get(Music.filename == filename)['votes'] + 1}, Music.filename == filename)
-
-# Route for voting
 @app.route('/vote', methods=['POST'])
 def vote():
     filename = request.form['filename']
-    update_votes(filename)
+    vote_data = {
+        'voter_address': request.remote_addr,
+        'filename': filename
+    }
+    update_votes(filename, vote_data)
     return redirect(url_for('index'))
 
-# Initialize TinyDB database
-db = TinyDB('music.json')
 
-# Save uploaded music to the database
+
 def save_uploaded_music(filename, uploader_address):
     db.insert({'filename': filename, 'uploader_address': uploader_address, 'votes': 0})
 
-# Get uploaded music from the database
 def get_uploaded_music():
     if os.path.exists('music.json') and os.path.getsize('music.json') > 0:
         with open('music.json') as f:
@@ -165,7 +167,6 @@ def get_uploaded_music():
     else:
         return []
 
-# Sepolia ABI
 try:
     with open(os.path.join('build', 'contracts', 'MusicContract.json')) as f:
         contract_json = json.load(f)
@@ -173,7 +174,6 @@ try:
 except Exception as e:
     print(e)
 
-# Proxy Pattern for managing transactions
 class TransactionManager:
     def __init__(self, wallet_address, private_key):
         self.wallet_address = wallet_address
@@ -181,41 +181,31 @@ class TransactionManager:
 
     def download_transaction(self, filename):
         try:
-            # Ensure the sender account is properly configured
             if not w3.eth.get_balance(self.wallet_address) > 0:
                 raise ValueError("Sender account has insufficient balance or is invalid")
 
-            # Get the nonce for the sender account
             nonce = w3.eth.get_transaction_count(self.wallet_address)
 
-            # Retrieve the contract instance
             contract = w3.eth.contract(address=sepolia_address, abi=SEPOLIA_ABI)
 
-            # Check if the file exists and the sender has sufficient balance
 
-            # Prepare transaction parameters
             tx_params = {
                 'from': self.wallet_address,
-                'chainId': 1337,  # Ensure this matches your network's chain ID
-                'gas': 30000000,  # Adjust gas limit as needed
-                'gasPrice': w3.eth.gas_price,  # Use the current gas price
+                'chainId': 1337,
+                'gas': 30000000,
+                'gasPrice': w3.eth.gas_price,
                 'nonce': nonce,
             }
 
-            # Send transaction to the contract's downloadFileData function
             tx_hash = contract.functions.downloadTransaction(filename).transact(tx_params)
 
-            # Wait for the transaction to be mined
             receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
 
-            # Retrieve file data from the contract
             with open(os.path.join('uploads', filename), 'rb') as file:
                 audio_data = file.read()
-            # Store file data in downloads folder
             with open(os.path.join('downloads', filename), 'wb') as file:
                 file.write(audio_data)
 
-            # Return the transaction hash along with a success message
             return tx_hash.hex()
 
         except ValueError as e:
@@ -229,12 +219,7 @@ class TransactionManager:
                 audio_data = file.read()
 
             contract = w3.eth.contract(address=sepolia_address, abi=SEPOLIA_ABI)
-            # tx = contract.functions.uploadFile(filename).build_transaction({
-            #     'chainId': 11155111,
-            #     'gas': 30000000,
-            #     'gasPrice': w3.eth.generate_gas_price({'value': os.path.getsize(os.path.join('uploads', filename))}),
-            #     'nonce': nonce,
-            # })
+
             tx = contract.functions.uploadFile(filename).transact({
                     'from':wallet_address,
                     'chainId': 1337,
@@ -243,9 +228,7 @@ class TransactionManager:
                     'nonce': nonce,
                 })
 
-            # signed_tx = w3.eth.account.sign_transaction(tx, self.private_key)
-            # transaction_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
-            # return transaction_hash
+
             return tx
         except ValueError as e:
             print(f"Invalid value: {e}")
@@ -257,19 +240,11 @@ class TransactionManager:
             nonce = w3.eth.get_transaction_count(self.wallet_address)
 
             contract = w3.eth.contract(address=sepolia_address, abi=SEPOLIA_ABI)
-            # tx = contract.functions.deleteFile(filename).build_transaction({
-            #     'chainId': 11155111,
-            #     'gas': 30000000,
-            #     'nonce': nonce,
-            # })
 
-            # signed_tx = w3.eth.account.sign_transaction(tx, self.private_key)
-            # transaction_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
-            # return transaction_hash
             tx = contract.functions.deleteFile(filename).transact({
                 'from': wallet_address,
                 'chainId': 1337,
-                'gasPrice': w3.eth.gas_price,  # Use the current gas price
+                'gasPrice': w3.eth.gas_price,
                     'gas': 30000000,
                 'nonce': nonce,
             })
@@ -279,41 +254,33 @@ class TransactionManager:
 
     def listen_to_events(self):
         try:
-            # Load MusicContract ABI and address
             with open(os.path.join('build', 'contracts', 'MusicContract.json')) as f:
                 music_contract_json = json.load(f)
                 MUSIC_ABI = music_contract_json['abi']
-                MUSIC_ADDRESS = music_contract_json['networks']['1337']['address']  # Update here
+                MUSIC_ADDRESS = music_contract_json['networks']['1337']['address']
 
-            # Load VotingContract ABI and address
             with open(os.path.join('build', 'contracts', 'VotingContract.json')) as f:
                 voting_contract_json = json.load(f)
                 VOTING_ABI = voting_contract_json['abi']
-                VOTING_ADDRESS = voting_contract_json['networks']['1337']['address']  # Update here
+                VOTING_ADDRESS = voting_contract_json['networks']['1337']['address']
 
-            # Create Web3 contracts for each contract
             music_contract = w3.eth.contract(address=MUSIC_ADDRESS, abi=MUSIC_ABI)
             voting_contract = w3.eth.contract(address=VOTING_ADDRESS, abi=VOTING_ABI)
 
-            # Event filters for MusicContract and VotingContract
             music_event_filter = music_contract.events.FileUploaded.createFilter(fromBlock="latest")
             voting_event_filter = voting_contract.events.VoteCasted.createFilter(fromBlock="latest")
 
-            # Loop to listen to events
             while True:
-                # Listen to events from MusicContract
                 for event in music_event_filter.get_new_entries():
                     print("New event from MusicContract:")
                     print(f"File uploaded: {event['args']['filename']} by {event['args']['uploader']}")
                     print(f"Amount: {event['args']['amount']} ETH")
 
-                # Listen to events from VotingContract
                 for event in voting_event_filter.get_new_entries():
                     print("New event from VotingContract:")
                     print(f"Vote casted by: {event['args']['voter']}")
                     print(f"For file: {event['args']['filename']}")
 
-                # Sleep for a few seconds before checking for new events again
                 time.sleep(5)
 
         except Exception as e:
@@ -339,8 +306,11 @@ def index():
     except requests.RequestException as e:
         return f"An error occurred: {e}"
 
-    # În loc să citești fișierele din folderul 'uploads', obține informațiile din baza de date
+    def get_uploaded_music():
+        return db.all()
+
     uploaded_files = get_uploaded_music()
+    form = UploadForm()
     costs = {}
     for file_info in uploaded_files:
         file_size = os.path.getsize(os.path.join('uploads', file_info['filename']))
@@ -349,7 +319,6 @@ def index():
 
     total_cost = sum(costs.values())
 
-    form = UploadForm()
     return render_template('index.html', wallet_address=wallet_address, balance=balance, uploaded_files=uploaded_files,
                            form=form, costs=costs, total_cost=total_cost)
 
@@ -382,16 +351,12 @@ def upload_music():
 
 @app.route('/delete/<filename>', methods=['POST'])
 def delete_music(filename):
-    # Verificăm dacă fișierul există în baza de date și dacă utilizatorul este proprietarul fișierului
     file_info = db.get(Query().filename == filename)
     if file_info and file_info['uploader_address'] == wallet_address:
-        # Apelăm funcția de ștergere a fișierului din contractul MusicContract
         transaction_hash = transaction_manager.delete_transaction(filename)
-        # Ștergem fișierul din baza de date
         db.remove(Query().filename == filename)
-        # Convert the HexBytes object to a string
         transaction_hash_str = HexBytes(transaction_hash).hex()
-        return jsonify({"success": True, "transaction_hash": transaction_hash_str})  # Convert to string before returning
+        return jsonify({"success": True, "transaction_hash": transaction_hash_str})
     else:
         return jsonify({"success": False, "message": "File not found or you are not the owner"}), 404
 
@@ -420,8 +385,7 @@ if __name__ == '__main__':
     if not os.path.exists('downloads'):
         os.makedirs('downloads')
 
-    # Ascultă evenimentele Sepolia într-un thread separat
-    
+
     event_thread = threading.Thread(target=partial(transaction_manager.listen_to_events))
     event_thread.start()
 
